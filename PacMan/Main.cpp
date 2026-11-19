@@ -39,6 +39,24 @@ int main()
 	Map map;
 	map.loadMap("map.txt");
 
+	Texture BOB_T("Textures/BOB.png");
+	Sprite BOB(BOB_T);
+
+	Texture Fish_T("Textures/fish.png");
+	Sprite fish(Fish_T);
+
+	Texture Tuna_T("Textures/tuna.png");
+	Sprite tuna(Tuna_T);
+
+	Texture Vacuum_T("Textures/vacuum.png");
+	Sprite vacuum(Vacuum_T);
+
+	Texture Wall_T("Textures/wall.jpg");
+	Sprite wall(Wall_T);
+
+
+
+
 	RenderWindow window(VideoMode({570, 560}), "Menu");
 	window.setFramerateLimit(60);
 	
