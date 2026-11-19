@@ -428,3 +428,4 @@ FodyWeavers.xsd
 *.vcxproj.filters
 *.vcxproj.user
 PacMan/ConsoleApplication1.vcxproj
+/PacMan
