@@ -27,8 +27,6 @@ struct Map {
 		IN.close();
 		return 0; 
 
-
-
 	}
 };
 
