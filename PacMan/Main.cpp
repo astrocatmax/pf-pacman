@@ -96,35 +96,43 @@ int main()
 
 		window.clear();
 		
-		for(int i = 0;i < map.rows;i++)
-			for (int j = 0; j < map.cols;j++)
+		Vector2f pos;
+
+		float y = 50; //actually the rows
+		float x; //actually the columns
+		for (int i = 0; i < map.rows; i++, y += 30)
+		{
+			x = 0;
+			for (int j = 0; j < map.cols; j++, x += 30)
 			{
+				pos = { x, y };
 				if (map.data[i][j] == '#')
 				{
-					wall.setPosition({ j * tile, i * tile + HUD});
+					wall.setPosition(pos);
 					window.draw(wall);
 				}
 				else if (map.data[i][j] == '.')
 				{
-					fish.setPosition({ j * tile, i * tile + HUD });
+					fish.setPosition(pos);
 					window.draw(fish);
 				}
 				else if (map.data[i][j] == 'o')
 				{
-					tuna.setPosition({ j * tile, i * tile + HUD });
+					tuna.setPosition(pos);
 					window.draw(tuna);
 				}
 				else if (map.data[i][j] == 'P')
 				{
-					BOB.setPosition({ j * tile, i * tile + HUD });
+					BOB.setPosition(pos);
 					window.draw(BOB);
 				}
 				else if (map.data[i][j] == 'G')
 				{
-					vacuum.setPosition({ j * tile, i * tile + HUD });
+					vacuum.setPosition(pos);
 					window.draw(vacuum);
 				}
 			}
+		}
 
 		window.display();
 	}
