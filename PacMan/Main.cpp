@@ -18,15 +18,19 @@ struct Map {
 			return -1;
 
 		IN >> rows >> cols;
-		IN.ignore(1000, '\n');
+		//IN.ignore(1000, '\n');
 
 		char line[1000];
 
 		for (int i = 0; i < rows; i++)
 		{
-			IN.getline(line, 1000);
+			//IN.getline(line, 1000);
 			for (int j = 0; j < cols; j++)
-				data[i][j] = line[j];
+			{
+				//data[i][j] = line[j];
+				IN >> data[i][j];
+			}
+
 		}
 
 		IN.close();
@@ -82,9 +86,6 @@ int main()
 
 	RenderWindow window(VideoMode({ 570, 680 }), "Menu");
 	window.setFramerateLimit(60);
-
-	float tile = 30.f;
-	float HUD = 50.f;
 
 	while (window.isOpen())
 	{
