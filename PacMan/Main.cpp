@@ -41,6 +41,8 @@ int main()
 
 	Texture BOB_T("Textures/BOB.png");
 	Sprite BOB(BOB_T);
+	BOB.setOrigin({ 600,600 });
+	BOB.setPosition({ 600,600 });
 
 	Texture Fish_T("Textures/fish.png");
 	Sprite fish(Fish_T);
@@ -48,18 +50,18 @@ int main()
 	Texture Tuna_T("Textures/tuna.png");
 	Sprite tuna(Tuna_T);
 
-	Texture Vacuum_T("Textures/vacuum.png");
+	Texture Vacuum_T("Textures/vaccuum.png");
 	Sprite vacuum(Vacuum_T);
 
 	Texture Wall_T("Textures/wall.jpg");
 	Sprite wall(Wall_T);
 
 
-
-
-	RenderWindow window(VideoMode({570, 560}), "Menu");
+	RenderWindow window(VideoMode({ 570, 560 }), "Menu");
 	window.setFramerateLimit(60);
 	
+	
+
 	while (window.isOpen())
 	{
 		while (optional event = window.pollEvent())
@@ -70,8 +72,13 @@ int main()
 
 		window.clear();
 		
+		BOB.rotate(degrees(3));
 
 
+		window.draw(BOB);
 		window.display();
+
+
+
 	}
 }
