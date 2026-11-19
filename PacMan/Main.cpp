@@ -17,6 +17,7 @@ struct Map {
 		if (!IN.is_open())
 			return -1;
 		
+
 		IN >> rows >> cols;
 
 		for (int i = 0; i < rows; i++)
@@ -24,7 +25,10 @@ struct Map {
 				IN >> map[i][j];
 
 		IN.close();
-		return 0;
+		return 0; 
+
+
+
 	}
 };
 
