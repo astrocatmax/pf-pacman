@@ -38,9 +38,6 @@ int main()
 {
 	Map map;
 	map.loadMap("map.txt");
-	Texture BOBText("Textures/BOB.png");
-	sprite BOB(BOBText);
-
 
 	RenderWindow window(VideoMode({570, 560}), "Menu");
 	window.setFramerateLimit(60);
