@@ -37,12 +37,13 @@ struct Map {
 int main()
 {
 	Map map;
-	map.loadMap("map.txt");
-
+	if (map.loadMap("map.txt"))
+	{
+		cout << "Map not Found";
+		return 0;
+	}
 	Texture BOB_T("Textures/BOB.png");
 	Sprite BOB(BOB_T);
-	BOB.setOrigin({ 600,600 });
-	BOB.setPosition({ 600,600 });
 
 	Texture Fish_T("Textures/fish.png");
 	Sprite fish(Fish_T);
@@ -60,8 +61,6 @@ int main()
 	RenderWindow window(VideoMode({ 570, 560 }), "Menu");
 	window.setFramerateLimit(60);
 	
-	
-
 	while (window.isOpen())
 	{
 		while (optional event = window.pollEvent())
