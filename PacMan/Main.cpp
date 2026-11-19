@@ -50,10 +50,10 @@ int main()
 	Texture Tuna_T("Textures/tuna.png");
 	Sprite tuna(Tuna_T);
 
-	Texture Vacuum_T("Textures/vaccuum.png");
+	Texture Vacuum_T("Textures/vacuum.png");
 	Sprite vacuum(Vacuum_T);
 
-	Texture Wall_T("Textures/wall.jpg");
+	Texture Wall_T("Textures/wall.png");
 	Sprite wall(Wall_T);
 
 
