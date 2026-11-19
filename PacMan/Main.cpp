@@ -30,7 +30,7 @@ struct Map {
 		}
 
 		IN.close();
-		return 0; 
+		return 0;
 	}
 };
 
@@ -38,14 +38,8 @@ int main()
 {
 	Map map;
 	map.loadMap("map.txt");
-
-	for (int i = 0;i < map.rows;i++)
-	{
-		for (int j = 0; j < map.cols; j++)
-			cout << map.data[i][j];
-		cout << endl;
-	}
-
+	Texture BOBText("Textures/BOB.png");
+	sprite BOB(BOBText);
 
 
 	RenderWindow window(VideoMode({570, 560}), "Menu");
@@ -61,6 +55,8 @@ int main()
 
 		window.clear();
 		
+
+
 		window.display();
 	}
 }
