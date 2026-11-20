@@ -62,7 +62,7 @@ struct Map {
 		ifstream IN(name);
 
 		if (!IN.is_open())
-			return -1;
+			return 0;
 
 		IN >> rows >> cols;
 		for (int i = 0; i < rows; i++)
@@ -108,7 +108,7 @@ struct Map {
 			}
 		}
 
-		return 0;
+		return 1;
 	}
 
 	void display()
@@ -265,7 +265,7 @@ int main()
 	score.setFillColor(Color::White);
 	score.setStyle(Text::Bold | Text::Italic);
 
-	if (map.load("map.txt") == -1)
+	if (!map.load("map.txt"))
 	{
 		cout << "Map not Found";
 		return 0;
