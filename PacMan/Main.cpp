@@ -14,12 +14,12 @@ Font font("Fonts/Roboto/Roboto.ttf");
 Text score(font);
 
 
-Texture BOB_T("Textures/BOB.png");
+Texture BOB_R("Textures/BOB.png");
 Texture BOB_D("Textures/BOB_down.png");
 Texture BOB_U("Textures/BOB_up.png");
 Texture BOB_L("Textures/BOB_left.png");
 
-Sprite bob(BOB_T);
+Sprite bob(BOB_R);
 int bobRowStrt, bobColStrt, bobRow, bobCol;
 
 Texture Fish_T("Textures/fish.png");
@@ -217,7 +217,7 @@ void updateGame()
 		}
 		else if (keyDir == 4 && bobFrame > Player_Speed && map.data[bobRow][bobCol + 1] != '#') //Right
 		{
-			bob.setTexture(BOB_T);
+			bob.setTexture(BOB_R);
 			bobCol++;
 			bobFrame = 1;
 		}
