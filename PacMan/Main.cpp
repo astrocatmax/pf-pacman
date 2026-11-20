@@ -12,6 +12,10 @@ const int Player_Speed = 8;
 
 
 Texture BOB_T("Textures/BOB.png");
+Texture BOB_D("Textures/BOB_down.png");
+Texture BOB_U("Textures/BOB_up.png");
+Texture BOB_L("Textures/BOB_left.png");
+
 Sprite bob(BOB_T);
 int bobRowStrt, bobColStrt, bobRow, bobCol;
 //BOB.setOrigin({ 15,15 });
@@ -184,29 +188,33 @@ int bobFrame = Player_Speed;
 void updateGame()
 {
 	bobFrame++;
-	if (keyDir == 1 && bobFrame > Player_Speed)
+	if (keyDir == 1 && bobFrame > Player_Speed) //Up
 	{
+		bob.setTexture(BOB_U);
 		bobRow--;
 		bobFrame = 1;
 		if (map.data[bobRow][bobCol] == '#')
 			bobRow++;
 	}
-	else if (keyDir == 2 && bobFrame > Player_Speed)
+	else if (keyDir == 2 && bobFrame > Player_Speed) //Down
 	{
+		bob.setTexture(BOB_D);
 		bobRow++;
 		bobFrame = 1;
 		if (map.data[bobRow][bobCol] == '#')
 			bobRow--;
 	}
-	else if (keyDir == 3 && bobFrame > Player_Speed)
+	else if (keyDir == 3 && bobFrame > Player_Speed) //Left
 	{
+		bob.setTexture(BOB_L);
 		bobCol--;
 		bobFrame = 1;
-		if (map.data[bobRow][bobCol] == '#')
+		if (map.data[bobRow][bobCol] == '#') 
 			bobCol++;
 	}
-	else if (keyDir == 4 && bobFrame > Player_Speed)
+	else if (keyDir == 4 && bobFrame > Player_Speed) //Right
 	{
+		bob.setTexture(BOB_T);
 		bobCol++;
 		bobFrame = 1;
 		if (map.data[bobRow][bobCol] == '#')
