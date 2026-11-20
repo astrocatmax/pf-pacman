@@ -53,10 +53,12 @@ struct Map {
 
 	int load(string name)
 	{
+		//initializing variables
 		score_total = 0; 
 		food_counter = 0; 
 		live_counter = 3;
 
+		//loading the map
 		ifstream IN(name);
 
 		if (!IN.is_open())
@@ -73,8 +75,8 @@ struct Map {
 				}
 			}
 		}
-
 		IN.close();
+
 
 		// Finding initial player and enemy positions
 		int vacNo = 0; //vacuum Number
