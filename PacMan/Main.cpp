@@ -8,7 +8,7 @@ using namespace std;
 
 //constants
 const int Player_Speed = 8;
-int score_total = 0;
+int score_total = 0, food_counter = 0;
 //constants
 
 Font font("Fonts/Roboto/Roboto.ttf");
@@ -64,6 +64,9 @@ struct Map {
 			{
 				//data[i][j] = line[j];
 				IN >> data[i][j];
+				if (data[i][j] == '.' || data[i][j] == 'o') {
+					food_counter ++;
+				}
 			}
 		}
 
@@ -197,11 +200,13 @@ void updateGame()
 		if (map.data[bobRow][bobCol] == '.') {
 			map.data[bobRow][bobCol] = '-';
 			score_total += 10;
+			food_counter--;
+
 		}
 		if (map.data[bobRow][bobCol] == 'o') {
 			map.data[bobRow][bobCol] = '-';
 			score_total += 50;
-
+			food_counter--;
 		}
 
 		if (keyDir == 1 && bobFrame > Player_Speed && map.data[bobRow - 1][bobCol] != '#') //Up
@@ -243,7 +248,6 @@ void drawGame()
 
 int main()
 {
-
 	score.setCharacterSize(30); //size in pixel
 	score.setFillColor(Color::White);
 	score.setStyle(Text::Bold | Text::Italic);
@@ -253,6 +257,8 @@ int main()
 		cout << "Map not Found";
 		return 0;
 	}
+	cout << food_counter;
+
 
 	map.initialPos();
 	bobCol = bobColStrt;
