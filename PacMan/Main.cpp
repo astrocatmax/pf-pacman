@@ -8,7 +8,7 @@ using namespace std;
 
 Texture BOB_T("Textures/BOB.png");
 Sprite bob(BOB_T);
-float bobRowStrt, bobColStrt, bobRow, bobCol;
+int bobRowStrt, bobColStrt, bobRow, bobCol;
 //BOB.setOrigin({ 15,15 });
 
 Texture Fish_T("Textures/fish.png");
@@ -22,7 +22,7 @@ Sprite tuna(Tuna_T);
 
 Texture Vacuum_T("Textures/vacuum.png");
 Sprite vacuum(Vacuum_T);
-float vacRowStrt[4], vacColStrt[4], vacDir[4];
+int vacRowStrt[4], vacColStrt[4], vacDir[4];
 //vacuum.setOrigin({ 15,15 });
 
 
@@ -117,7 +117,7 @@ struct Map {
 			}
 		}
 
-		bob.setPosition({ bobCol * 30, bobRow * 30 + 50 });
+		bob.setPosition({ bobCol * 30.f, bobRow * 30.f + 50.f });
 		window.draw(bob);
 		for (int i = 0; i < 4; i++)
 		{
@@ -130,7 +130,7 @@ struct Map {
 			else if (i == 3)
 				vacuum.setColor(Color::Cyan);
 
-			vacuum.setPosition({ vacColStrt[i] * 30, vacRowStrt[i] * 30 + 50 });
+			vacuum.setPosition({ vacColStrt[i] * 30.f, vacRowStrt[i] * 30.f + 50.f });
 			window.draw(vacuum);
 		}
 	}
