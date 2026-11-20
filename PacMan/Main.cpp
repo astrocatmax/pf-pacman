@@ -81,11 +81,8 @@ struct Map {
 		}
 
 		IN.close();
-		return 0;
-	}
 
-	void initialPos() // Finding initial player and enemy positions
-	{
+		// Finding initial player and enemy positions
 		int vacNo = 0; //vacuum Number
 		for (int i = 0; i < rows; i++)
 		{
@@ -95,19 +92,27 @@ struct Map {
 				{
 					bobRowStrt = i;
 					bobColStrt = j;
+
+					bobCol = bobColStrt;
+					bobRow = bobRowStrt;
+
 					data[i][j] = '-';
 				}
 				else if (data[i][j] == 'G')
 				{
 					vacRowStrt[vacNo] = i;
 					vacColStrt[vacNo] = j;
+
+					vacRow[vacNo] = vacRowStrt[vacNo];
+					vacCol[vacNo] = vacColStrt[vacNo];
+
 					data[i][j] = '-';
 					vacNo++;
 				}
 			}
 		}
-		bobCol = bobColStrt;
-		bobRow = bobRowStrt;
+
+		return 0;
 	}
 
 	void display()
@@ -270,10 +275,6 @@ int main()
 		return 0;
 	}
 	cout << food_counter;
-
-
-	map.initialPos();
-
 
 	window.setFramerateLimit(60);
 
