@@ -8,8 +8,14 @@ using namespace std;
 
 //constants
 const int Player_Speed = 8;
-int score_total = 0, food_counter = 0;
+const int menu = 0, playing = 1, game_over = 2;
 //constants
+
+//global variables
+int score_total = 0, food_counter = 0, live_counter = 3;
+int state = menu;
+//global variable
+
 
 Font font("Fonts/Roboto/Roboto.ttf");
 Text score(font);
@@ -47,6 +53,10 @@ struct Map {
 
 	int load(string name)
 	{
+		score_total = 0; 
+		food_counter = 0; 
+		live_counter = 3;
+
 		ifstream IN(name);
 
 		if (!IN.is_open())
@@ -74,7 +84,7 @@ struct Map {
 		return 0;
 	}
 
-	void initialPos() // Finding initial player and enemy pos
+	void initialPos() // Finding initial player and enemy positions
 	{
 		int vacNo = 0; //vacuum Number
 		for (int i = 0; i < rows; i++)
@@ -96,6 +106,8 @@ struct Map {
 				}
 			}
 		}
+		bobCol = bobColStrt;
+		bobRow = bobRowStrt;
 	}
 
 	void display()
@@ -261,8 +273,7 @@ int main()
 
 
 	map.initialPos();
-	bobCol = bobColStrt;
-	bobRow = bobRowStrt;
+
 
 	window.setFramerateLimit(60);
 
