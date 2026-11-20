@@ -14,6 +14,7 @@ Font font("Fonts/Roboto/Roboto.ttf");
 Text score(font);
 
 
+
 Texture BOB_R("Textures/BOB.png");
 Texture BOB_D("Textures/BOB_down.png");
 Texture BOB_U("Textures/BOB_up.png");
@@ -227,6 +228,7 @@ void updateGame()
 void drawGame()
 {
 	window.clear();
+	window.draw(score);
 
 	map.display();
 
@@ -235,11 +237,11 @@ void drawGame()
 
 int main()
 {
-	//score.setString("AMITOKOSITA AN AN");
-	//score.setCharacterSize(20); //size in pixel
-	//score.setFillColor(Color::Cyan);
-	//score.setStyle(Text::Bold | Text::Italic);
-
+	score.setString("SCORE:");
+	score.setCharacterSize(30); //size in pixel
+	score.setFillColor(Color::White);
+	score.setStyle(Text::Bold | Text::Italic);
+	
 	if (map.load("map.txt") == -1)
 	{
 		cout << "Map not Found";
