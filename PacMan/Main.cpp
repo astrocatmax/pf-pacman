@@ -7,8 +7,8 @@ using namespace sf;
 using namespace std;
 
 Texture BOB_T("Textures/BOB.png");
-Sprite BOB(BOB_T);
-Vector2f initialBOB;
+Sprite bob(BOB_T);
+float bobRowStrt, bobColStrt, bobRow, bobCol;
 //BOB.setOrigin({ 15,15 });
 
 Texture Fish_T("Textures/fish.png");
@@ -22,6 +22,7 @@ Sprite tuna(Tuna_T);
 
 Texture Vacuum_T("Textures/vacuum.png");
 Sprite vacuum(Vacuum_T);
+float vacRowStrt[4], vacColStrt[4], vacDir[4];
 //vacuum.setOrigin({ 15,15 });
 
 
@@ -56,11 +57,34 @@ struct Map {
 				//data[i][j] = line[j];
 				IN >> data[i][j];
 			}
-
 		}
 
 		IN.close();
 		return 0;
+	}
+
+	void initialPos() // Finding initial player and enemy pos
+	{
+		int vacNo = 0;
+		for (int i = 0; i < rows; i++) 
+		{
+			for (int j = 0; j < cols; j++)
+			{
+				if (data[i][j] == 'P')
+				{
+					bobRowStrt = i;
+					bobColStrt = j;
+					data[i][j] = '-';
+				}
+				else if (data[i][j] == 'G')
+				{
+					vacRowStrt[vacNo] = i;
+					vacColStrt[vacNo] = j;
+					data[i][j] = '-';
+					vacNo++;
+				}
+			}
+		}
 	}
 
 	void display()
@@ -90,24 +114,31 @@ struct Map {
 					tuna.setPosition(pos);
 					window.draw(tuna);
 				}
-				else if (data[i][j] == 'P')
-				{
-					BOB.setPosition(pos);
-					window.draw(BOB);
-				}
-				else if (data[i][j] == 'G')
-				{
-					vacuum.setPosition(pos);
-					window.draw(vacuum);
-				}
 			}
 		}
 
+		bob.setPosition({ bobCol * 30, bobRow * 30 + 50 });
+		window.draw(bob);
+		for (int i = 0; i < 4; i++)
+		{
+			if (i == 0)
+				vacuum.setColor(Color::Red);
+			else if (i == 1)
+				vacuum.setColor(Color::Green);
+			else if (i == 2)
+				vacuum.setColor(Color::Magenta);
+			else if (i == 3)
+				vacuum.setColor(Color::Cyan);
+
+			vacuum.setPosition({ vacColStrt[i] * 30, vacRowStrt[i] * 30 + 50 });
+			window.draw(vacuum);
+		}
 	}
 };
 
 Map map;
 int keyDir = 0;
+
 
 void handleInput()
 {
@@ -116,9 +147,7 @@ void handleInput()
 		if (event->is<Event::Closed>())
 			window.close();
 
-		if (event->is<sf::Event::Closed>())
-			window.close();
-		else if (const auto* key = event->getIf<sf::Event::KeyPressed>())
+		else if (const auto* key = event->getIf<Event::KeyPressed>())
 		{
 			if (key->code == Keyboard::Key::Up)
 				keyDir = 1;
@@ -128,7 +157,7 @@ void handleInput()
 				keyDir = 3;
 			else if (key->code == Keyboard::Key::Right)
 				keyDir = 4;
-			if (key->code == Keyboard::Key::W)
+			else if (key->code == Keyboard::Key::W)
 				keyDir = 1;
 			else if (key->code == Keyboard::Key::S)
 				keyDir = 2;
@@ -143,7 +172,14 @@ void handleInput()
 
 void updateGame()
 {
-
+	if (keyDir == 1)
+		bobRow--;
+	else if (keyDir == 2)
+		bobRow++;
+	else if (keyDir == 3)
+		bobCol--;	
+	else if (keyDir == 4)
+		bobCol++;
 }
 
 void drawGame()
@@ -151,17 +187,22 @@ void drawGame()
 	window.clear();
 
 	map.display();
-
+	
 	window.display();
 }
 
 int main()
 {
+
 	if (map.load("map.txt") == -1)
 	{
 		cout << "Map not Found";
 		return 0;
 	}
+
+	map.initialPos();
+	bobCol = bobColStrt;
+	bobRow = bobRowStrt;
 
 	window.setFramerateLimit(60);
 
