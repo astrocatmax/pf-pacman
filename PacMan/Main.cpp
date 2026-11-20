@@ -14,28 +14,22 @@ const int Player_Speed = 8;
 Texture BOB_T("Textures/BOB.png");
 Sprite bob(BOB_T);
 int bobRowStrt, bobColStrt, bobRow, bobCol;
-//BOB.setOrigin({ 15,15 });
 
 Texture Fish_T("Textures/fish.png");
 Sprite fish(Fish_T);
-//fish.setOrigin({ 15,15 });
 
 
 Texture Tuna_T("Textures/tuna.png");
 Sprite tuna(Tuna_T);
-//tuna.setOrigin({ 15,15 });
 
 Texture Vacuum_T("Textures/vacuum.png");
 Sprite vacuum(Vacuum_T);
 int vacRowStrt[4], vacColStrt[4], vacDir[4];
-//vacuum.setOrigin({ 15,15 });
-
 
 Texture Wall_T("Textures/wall.png");
 Sprite wall(Wall_T);
-//wall.setOrigin({ 15,15 });
 
-RenderWindow window(VideoMode({ 570, 680 }), "PAC MAN");
+RenderWindow window(VideoMode({ 570, 680 }), "PAC-MAN");
 
 
 struct Map {
@@ -52,7 +46,7 @@ struct Map {
 		IN >> rows >> cols;
 		//IN.ignore(1000, '\n');
 
-		char line[1000];
+		//char line[1000];
 
 		for (int i = 0; i < rows; i++)
 		{
@@ -70,7 +64,7 @@ struct Map {
 
 	void initialPos() // Finding initial player and enemy pos
 	{
-		int vacNo = 0;
+		int vacNo = 0; //vacuum Number
 		for (int i = 0; i < rows; i++) 
 		{
 			for (int j = 0; j < cols; j++)
@@ -124,6 +118,7 @@ struct Map {
 
 		bob.setPosition({ bobCol * 30.f, bobRow * 30.f + 50.f });
 		window.draw(bob);
+
 		for (int i = 0; i < 4; i++)
 		{
 			if (i == 0)
@@ -225,7 +220,6 @@ void drawGame()
 
 int main()
 {
-
 	if (map.load("map.txt") == -1)
 	{
 		cout << "Map not Found";
