@@ -179,33 +179,25 @@ int bobFrame = Player_Speed;
 void updateGame()
 {
 	bobFrame++;
-	if (keyDir == 1 && bobFrame > Player_Speed)
+	if (keyDir == 1 && bobFrame > Player_Speed && map.data[bobRow - 1][bobCol] != '#')
 	{
 		bobRow--;
 		bobFrame = 1;
-		if (map.data[bobRow][bobCol] == '#')
-			bobRow++;
 	}
-	else if (keyDir == 2 && bobFrame > Player_Speed)
+	else if (keyDir == 2 && bobFrame > Player_Speed && map.data[bobRow + 1][bobCol] != '#')
 	{
 		bobRow++;
 		bobFrame = 1;
-		if (map.data[bobRow][bobCol] == '#')
-			bobRow--;
 	}
-	else if (keyDir == 3 && bobFrame > Player_Speed)
+	else if (keyDir == 3 && bobFrame > Player_Speed && map.data[bobRow][bobCol - 1] != '#')
 	{
 		bobCol--;
 		bobFrame = 1;
-		if (map.data[bobRow][bobCol] == '#')
-			bobCol++;
 	}
-	else if (keyDir == 4 && bobFrame > Player_Speed)
+	else if (keyDir == 4 && bobFrame > Player_Speed && map.data[bobRow][bobCol + 1] != '#')
 	{
 		bobCol++;
 		bobFrame = 1;
-		if (map.data[bobRow][bobCol] == '#')
-			bobCol--;
 	}
 }
 
