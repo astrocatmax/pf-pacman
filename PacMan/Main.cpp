@@ -63,16 +63,10 @@ struct Map {
 			return -1;
 
 		IN >> rows >> cols;
-		//IN.ignore(1000, '\n');
-
-		//char line[1000];
-
 		for (int i = 0; i < rows; i++)
 		{
-			//IN.getline(line, 1000);
 			for (int j = 0; j < cols; j++)
 			{
-				//data[i][j] = line[j];
 				IN >> data[i][j];
 				if (data[i][j] == '.' || data[i][j] == 'o') {
 					food_counter ++;
