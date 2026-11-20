@@ -8,6 +8,7 @@ using namespace std;
 
 //constants
 const int Player_Speed = 8;
+int score_total = 0;
 //constants
 
 Font font("Fonts/Roboto/Roboto.ttf");
@@ -141,6 +142,10 @@ struct Map {
 			vacuum.setPosition({ vacColStrt[i] * 30.f, vacRowStrt[i] * 30.f + 50.f });
 			window.draw(vacuum);
 		}
+		score.setString("SCORE:" + to_string(score_total));
+		window.draw(score);
+
+
 	}
 };
 
@@ -191,9 +196,12 @@ void updateGame()
 	{
 		if (map.data[bobRow][bobCol] == '.') {
 			map.data[bobRow][bobCol] = '-';
+			score_total += 10;
 		}
 		if (map.data[bobRow][bobCol] == 'o') {
 			map.data[bobRow][bobCol] = '-';
+			score_total += 50;
+
 		}
 
 		if (keyDir == 1 && bobFrame > Player_Speed && map.data[bobRow - 1][bobCol] != '#') //Up
@@ -227,7 +235,6 @@ void updateGame()
 void drawGame()
 {
 	window.clear();
-	window.draw(score);
 
 	map.display();
 
@@ -236,11 +243,11 @@ void drawGame()
 
 int main()
 {
-	score.setString("SCORE:");
+
 	score.setCharacterSize(30); //size in pixel
 	score.setFillColor(Color::White);
 	score.setStyle(Text::Bold | Text::Italic);
-	
+
 	if (map.load("map.txt") == -1)
 	{
 		cout << "Map not Found";
