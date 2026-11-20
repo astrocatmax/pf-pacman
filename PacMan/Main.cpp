@@ -8,6 +8,7 @@ using namespace std;
 
 Texture BOB_T("Textures/BOB.png");
 Sprite BOB(BOB_T);
+Vector2f initialBOB;
 //BOB.setOrigin({ 15,15 });
 
 Texture Fish_T("Textures/fish.png");
@@ -106,6 +107,7 @@ struct Map {
 };
 
 Map map;
+int keyDir = 0;
 
 void handleInput()
 {
@@ -113,6 +115,29 @@ void handleInput()
 	{
 		if (event->is<Event::Closed>())
 			window.close();
+
+		if (event->is<sf::Event::Closed>())
+			window.close();
+		else if (const auto* key = event->getIf<sf::Event::KeyPressed>())
+		{
+			if (key->code == Keyboard::Key::Up)
+				keyDir = 1;
+			else if (key->code == Keyboard::Key::Down)
+				keyDir = 2;
+			else if (key->code == Keyboard::Key::Left)
+				keyDir = 3;
+			else if (key->code == Keyboard::Key::Right)
+				keyDir = 4;
+			if (key->code == Keyboard::Key::W)
+				keyDir = 1;
+			else if (key->code == Keyboard::Key::S)
+				keyDir = 2;
+			else if (key->code == Keyboard::Key::A)
+				keyDir = 3;
+			else if (key->code == Keyboard::Key::D)
+				keyDir = 4;
+			// ... Left, Right, W, A, S, D, P, Enter, Escape in the same way
+		}
 	}
 }
 
