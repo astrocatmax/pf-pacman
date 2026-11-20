@@ -20,7 +20,7 @@ Texture BOB_U("Textures/BOB_up.png");
 Texture BOB_L("Textures/BOB_left.png");
 
 Sprite bob(BOB_R);
-int bobRowStrt, bobColStrt, bobRow, bobCol;
+int bobRowStrt, bobColStrt, bobRow, bobCol, keyDir;
 
 Texture Fish_T("Textures/fish.png");
 Sprite fish(Fish_T);
@@ -31,7 +31,7 @@ Sprite tuna(Tuna_T);
 
 Texture Vacuum_T("Textures/vacuum.png");
 Sprite vacuum(Vacuum_T);
-int vacRowStrt[4], vacColStrt[4], vacDir[4];
+int vacRowStrt[4], vacColStrt[4], vacRow[4], vacCol[4], vacDir[4];
 
 Texture Wall_T("Textures/wall.png");
 Sprite wall(Wall_T);
@@ -144,7 +144,6 @@ struct Map {
 };
 
 Map map;
-int keyDir = 0;
 
 
 void handleInput()
