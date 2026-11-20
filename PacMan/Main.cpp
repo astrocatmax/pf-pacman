@@ -6,6 +6,11 @@
 using namespace sf;
 using namespace std;
 
+//constants
+const int Player_Speed = 8;
+//constants
+
+
 Texture BOB_T("Textures/BOB.png");
 Sprite bob(BOB_T);
 int bobRowStrt, bobColStrt, bobRow, bobCol;
@@ -30,7 +35,7 @@ Texture Wall_T("Textures/wall.png");
 Sprite wall(Wall_T);
 //wall.setOrigin({ 15,15 });
 
-RenderWindow window(VideoMode({ 570, 680 }), "Menu");
+RenderWindow window(VideoMode({ 570, 680 }), "PAC MAN");
 
 
 struct Map {
@@ -146,40 +151,67 @@ void handleInput()
 	{
 		if (event->is<Event::Closed>())
 			window.close();
-
 		else if (const auto* key = event->getIf<Event::KeyPressed>())
 		{
-			if (key->code == Keyboard::Key::Up)
-				keyDir = 1;
-			else if (key->code == Keyboard::Key::Down)
-				keyDir = 2;
-			else if (key->code == Keyboard::Key::Left)
-				keyDir = 3;
-			else if (key->code == Keyboard::Key::Right)
-				keyDir = 4;
-			else if (key->code == Keyboard::Key::W)
-				keyDir = 1;
-			else if (key->code == Keyboard::Key::S)
-				keyDir = 2;
-			else if (key->code == Keyboard::Key::A)
-				keyDir = 3;
-			else if (key->code == Keyboard::Key::D)
-				keyDir = 4;
+			if (key->code == Keyboard::Key::Up || key->code == Keyboard::Key::W)
+			{
+				if (map.data[bobRow - 1][bobCol] != '#')
+					keyDir = 1;
+			}
+			else if (key->code == Keyboard::Key::Down || key->code == Keyboard::Key::S)
+			{
+				if (map.data[bobRow + 1][bobCol] != '#')
+					keyDir = 2;
+			}
+			else if (key->code == Keyboard::Key::Left || key->code == Keyboard::Key::A)
+			{
+				if (map.data[bobRow][bobCol - 1] != '#')
+					keyDir = 3;
+			}
+			else if (key->code == Keyboard::Key::Right || key->code == Keyboard::Key::D)
+			{
+				if (map.data[bobRow][bobCol + 1] != '#')
+					keyDir = 4;
+			}
 			// ... Left, Right, W, A, S, D, P, Enter, Escape in the same way
 		}
 	}
 }
 
+
+int bobFrame = Player_Speed;
+
 void updateGame()
 {
-	if (keyDir == 1)
+	bobFrame++;
+	if (keyDir == 1 && bobFrame > Player_Speed)
+	{
 		bobRow--;
-	else if (keyDir == 2)
+		bobFrame = 1;
+		if (map.data[bobRow][bobCol] == '#')
+			bobRow++;
+	}
+	else if (keyDir == 2 && bobFrame > Player_Speed)
+	{
 		bobRow++;
-	else if (keyDir == 3)
-		bobCol--;	
-	else if (keyDir == 4)
+		bobFrame = 1;
+		if (map.data[bobRow][bobCol] == '#')
+			bobRow--;
+	}
+	else if (keyDir == 3 && bobFrame > Player_Speed)
+	{
+		bobCol--;
+		bobFrame = 1;
+		if (map.data[bobRow][bobCol] == '#')
+			bobCol++;
+	}
+	else if (keyDir == 4 && bobFrame > Player_Speed)
+	{
 		bobCol++;
+		bobFrame = 1;
+		if (map.data[bobRow][bobCol] == '#')
+			bobCol--;
+	}
 }
 
 void drawGame()
