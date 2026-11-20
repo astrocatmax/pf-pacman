@@ -10,6 +10,9 @@ using namespace std;
 const int Player_Speed = 8;
 //constants
 
+//Font font("arial.ttf"); //THE FONT DOESNT EXIST IN FOLDER AREA
+//Text score(font);
+
 
 Texture BOB_T("Textures/BOB.png");
 Texture BOB_D("Textures/BOB_down.png");
@@ -232,6 +235,10 @@ void drawGame()
 
 int main()
 {
+	//score.setString("AMITOKOSITA AN AN");
+//score.setCharacterSize(20); //size in pixel
+//score.setFillColor(Color::Cyan);
+//score.setStyle(Text::Bold | Text::Italic);
 	if (map.load("map.txt") == -1)
 	{
 		cout << "Map not Found";
