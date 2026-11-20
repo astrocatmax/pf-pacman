@@ -69,7 +69,7 @@ struct Map {
 	void initialPos() // Finding initial player and enemy pos
 	{
 		int vacNo = 0; //vacuum Number
-		for (int i = 0; i < rows; i++) 
+		for (int i = 0; i < rows; i++)
 		{
 			for (int j = 0; j < cols; j++)
 			{
@@ -182,30 +182,42 @@ int bobFrame = Player_Speed;
 
 void updateGame()
 {
+
 	bobFrame++;
-	if (keyDir == 1 && bobFrame > Player_Speed && map.data[bobRow - 1][bobCol] != '#')
+	if (bobFrame > Player_Speed)
 	{
-		bob.setTexture(BOB_U);
-		bobRow--;
-		bobFrame = 1;
-	}
-	else if (keyDir == 2 && bobFrame > Player_Speed && map.data[bobRow + 1][bobCol] != '#')
-	{
-		bob.setTexture(BOB_D);
-		bobRow++;
-		bobFrame = 1;
-	}
-	else if (keyDir == 3 && bobFrame > Player_Speed && map.data[bobRow][bobCol - 1] != '#')
-	{
-		bob.setTexture(BOB_L);
-		bobCol--;
-		bobFrame = 1;
-	}
-	else if (keyDir == 4 && bobFrame > Player_Speed && map.data[bobRow][bobCol + 1] != '#')
-	{
-		bob.setTexture(BOB_T);
-		bobCol++;
-		bobFrame = 1;
+		if (map.data[bobRow][bobCol] == '.') {
+			map.data[bobRow][bobCol] = '-';
+		}
+		if (map.data[bobRow][bobCol] == 'o') {
+			map.data[bobRow][bobCol] = '-';
+		}
+
+		if (keyDir == 1 && bobFrame > Player_Speed && map.data[bobRow - 1][bobCol] != '#') //Up
+		{
+			bob.setTexture(BOB_U);
+			bobRow--;
+			bobFrame = 1;
+		}
+		else if (keyDir == 2 && bobFrame > Player_Speed && map.data[bobRow + 1][bobCol] != '#') //Down
+		{
+
+			bob.setTexture(BOB_D);
+			bobRow++;
+			bobFrame = 1;
+		}
+		else if (keyDir == 3 && bobFrame > Player_Speed && map.data[bobRow][bobCol - 1] != '#') //Left
+		{
+			bob.setTexture(BOB_L);
+			bobCol--;
+			bobFrame = 1;
+		}
+		else if (keyDir == 4 && bobFrame > Player_Speed && map.data[bobRow][bobCol + 1] != '#') //Right
+		{
+			bob.setTexture(BOB_T);
+			bobCol++;
+			bobFrame = 1;
+		}
 	}
 }
 
@@ -214,7 +226,7 @@ void drawGame()
 	window.clear();
 
 	map.display();
-	
+
 	window.display();
 }
 
@@ -233,9 +245,9 @@ int main()
 	window.setFramerateLimit(60);
 
 	while (window.isOpen())
-	{		
+	{
 		handleInput();
 		updateGame();
-		drawGame();	
+		drawGame();
 	}
 }
