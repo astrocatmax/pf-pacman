@@ -20,6 +20,7 @@ int state = menu;
 
 Font font("Fonts/Roboto/Roboto.ttf");
 Text score(font);
+Text livesText(font);
 
 SoundBuffer beepBuf("Sounds/beep.wav");
 SoundBuffer meowBuf("Sounds/meow.mp3");
@@ -48,6 +49,9 @@ int vacRowStrt[4], vacColStrt[4], vacRow[4], vacCol[4], vacDir[4];
 
 Texture Wall_T("Textures/wall.png");
 Sprite wall(Wall_T);
+
+Texture Yarn_T("Textures/yarn.png");
+Sprite yarn(Yarn_T); 
 
 RenderWindow window(VideoMode({ 570, 680 }), "PAC-MAN");
 
@@ -163,8 +167,33 @@ struct Map {
 			vacuum.setPosition({ vacColStrt[i] * 30.f, vacRowStrt[i] * 30.f + 50.f });
 			window.draw(vacuum);
 		}
-		score.setString("SCORE:" + to_string(score_total));
+		score.setString("SCORE: " + to_string(score_total));
+
+		score.setCharacterSize(26);
+		score.setFillColor(Color::White);
+		score.setStyle(Text::Bold);
+		score.setOutlineColor(Color::Black);
+		score.setOutlineThickness(2.f);
+		score.setPosition({ 15.f, 8.f });
 		window.draw(score);
+
+
+
+		livesText.setString("LIVES");
+		livesText.setCharacterSize(26);
+		livesText.setFillColor(Color::White);
+		livesText.setStyle(Text::Bold);
+		livesText.setOutlineColor(Color::Black);
+		livesText.setOutlineThickness(2.f);
+		livesText.setPosition({ 400.f, 8.f });
+		window.draw(livesText);
+		
+		for (int i = 0; i < 3;i++) {
+			yarn.setPosition({ 475.f+(i*28), 8.f});
+			window.draw(yarn);
+		}
+		
+
 
 
 	}
@@ -270,9 +299,7 @@ void drawGame()
 
 int main()
 {
-	score.setCharacterSize(30); //size in pixel
-	score.setFillColor(Color::White);
-	score.setStyle(Text::Bold | Text::Italic);
+	
 
 	if (!map.load("map.txt"))
 	{
