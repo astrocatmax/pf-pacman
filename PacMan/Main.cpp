@@ -24,8 +24,10 @@ Text livesText(font);
 
 SoundBuffer beepBuf("Sounds/beep.wav");
 SoundBuffer meowBuf("Sounds/meow.mp3");
+SoundBuffer explosionBuf("Sounds/explosion.wav");
 Sound beep(beepBuf);
 Sound meow(meowBuf);
+Sound explode(explosionBuf);
 Music bgMusic("Sounds/music.mp3");
 
 Texture BOB_R("Textures/BOB.png");
@@ -188,7 +190,7 @@ struct Map {
 		livesText.setPosition({ 390.f, 8.f });
 		window.draw(livesText);
 		
-		for (int i = 0; i < 3;i++) {
+		for (int i = 0; i < live_counter;i++) {
 			yarn.setPosition({ 475.f+(i*28), 8.f});
 			window.draw(yarn);
 		}
@@ -258,6 +260,19 @@ void updateGame()
 			food_counter--;
 			meow.play();
 
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			if (vacRow[i] == bobRow && vacCol[i] == bobCol)
+			{
+				live_counter--;
+				explode.play();
+
+				bobRow = bobRowStrt;
+				bobCol = bobColStrt;
+				keyDir = 0;
+				break;
+			}
 		}
 
 		if (keyDir == 1 && bobFrame > Player_Speed && map.data[bobRow - 1][bobCol] != '#') //Up
