@@ -29,6 +29,7 @@ Sound beep(beepBuf);
 Sound meow(meowBuf);
 Sound explode(explosionBuf);
 Music bgMusic("Sounds/music.mp3");
+Music oiia("Sounds/oiia_power.mp3");
 
 Texture BOB_R("Textures/BOB.png");
 Texture BOB_D("Textures/BOB_down.png");
@@ -265,7 +266,10 @@ void updateGame()
 			map.data[bobRow][bobCol] = '-';
 			score_total += 50;
 			food_counter--;
+			bgMusic.pause();
 			meow.play();
+			oiia.play();
+
 
 		}
 		for (int i = 0; i < 4; i++)
@@ -321,7 +325,6 @@ void drawGame()
 
 int main()
 {
-	
 
 	if (!map.load("map.txt"))
 	{
