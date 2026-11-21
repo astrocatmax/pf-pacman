@@ -15,6 +15,7 @@ const int menu = 0, playing = 1, game_over = 2;
 //global variables
 int score_total = 0, food_counter = 0, live_counter = 3;
 int state = menu;
+int menusel = 0;
 bool oiiaPlaying = false;
 Clock oiiaClock;
 //global variable
@@ -22,7 +23,8 @@ Clock oiiaClock;
 
 Font font("Fonts/Roboto/Roboto.ttf");
 Text score(font);
-Text livesText(font);
+Text livestext(font);
+Text menutext(font);
 
 SoundBuffer beepBuf("Sounds/beep.wav");
 SoundBuffer meowBuf("Sounds/meow.mp3");
@@ -191,14 +193,14 @@ struct Map {
 
 
 
-		livesText.setString("LIVES: ");
-		livesText.setCharacterSize(26);
-		livesText.setFillColor(Color::White);
-		livesText.setStyle(Text::Bold);
-		livesText.setOutlineColor(Color::Black);
-		livesText.setOutlineThickness(2.f);
-		livesText.setPosition({ 390.f, 8.f });
-		window.draw(livesText);
+		livestext.setString("LIVES: ");
+		livestext.setCharacterSize(26);
+		livestext.setFillColor(Color::White);
+		livestext.setStyle(Text::Bold);
+		livestext.setOutlineColor(Color::Black);
+		livestext.setOutlineThickness(2.f);
+		livestext.setPosition({ 390.f, 8.f });
+		window.draw(livestext);
 		
 		for (int i = 0; i < live_counter;i++) {
 			yarn.setPosition({ 475.f+(i*28), 8.f});
@@ -213,7 +215,37 @@ struct Map {
 
 Map map;
 
+void drawCentered(const string& str, float y, int size, Color color)
+{
+	menutext.setString(str);
+	menutext.setCharacterSize(size);
+	menutext.setFillColor(color);
+	menutext.setStyle(Text::Bold);
+	menutext.setOutlineColor(Color::Black);
+	menutext.setOutlineThickness(2.f);
 
+	FloatRect b = menutext.getLocalBounds();
+	menutext.setOrigin({ b.position.x + b.size.x / 2.f, 0.f });
+	menutext.setPosition({ 285.f, y });
+	window.draw(menutext);
+}
+void drawMenu()
+{
+	drawCentered("PAC-MAN", 120.f, 60, Color::Yellow);
+
+	string options[3] = { "New Game", "Continue", "Exit" };
+	for (int i = 0; i < 3; i++)
+	{
+		Color c = Color::White;
+		if (i == menusel)
+			c = Color::Yellow;
+
+		string label = (i == menusel ? "> " : "  ") + options[i];
+		drawCentered(label, 290.f + i * 60.f, 36, c);
+	}
+
+	drawCentered("Up/Down to move, Enter to select", 600.f, 18, Color::White);
+}
 void handleInput()
 {
 	while (optional event = window.pollEvent())
@@ -222,6 +254,22 @@ void handleInput()
 			window.close();
 		else if (const auto* key = event->getIf<Event::KeyPressed>())
 		{
+			if (state == menu)
+			{
+				if (key->code == Keyboard::Key::Up || key->code == Keyboard::Key::W)
+					menusel = (menusel + 2) % 3;
+				else if (key->code == Keyboard::Key::Down || key->code == Keyboard::Key::S)
+					menusel = (menusel + 1) % 3;
+				else if (key->code == Keyboard::Key::Enter)
+				{
+					if (menusel == 0)
+						state = playing;     
+					else if (menusel == 2)
+						window.close();          
+					
+				}
+				continue;
+			}
 			if (key->code == Keyboard::Key::Up || key->code == Keyboard::Key::W)
 			{
 				if (map.data[bobRow - 1][bobCol] != '#')
@@ -252,6 +300,8 @@ int bobFrame = Player_Speed;
 
 void updateGame()
 {
+	if (state != playing)
+		return;
 	if (oiiaPlaying && oiiaClock.getElapsedTime().asSeconds() >= 5.f)
 	{
 		oiiaPlaying = false;
@@ -327,7 +377,10 @@ void drawGame()
 {
 	window.clear();
 
-	map.display();
+	if (state == menu)
+		drawMenu();
+	else
+		map.display();
 
 	window.display();
 }
