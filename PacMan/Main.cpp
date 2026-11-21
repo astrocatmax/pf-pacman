@@ -35,6 +35,7 @@ Texture BOB_D("Textures/BOB_down.png");
 Texture BOB_U("Textures/BOB_up.png");
 Texture BOB_L("Textures/BOB_left.png");
 
+
 Sprite bob(BOB_R);
 int bobRowStrt, bobColStrt, bobRow, bobCol, keyDir;
 
@@ -54,6 +55,12 @@ Sprite wall(Wall_T);
 
 Texture Yarn_T("Textures/yarn.png");
 Sprite yarn(Yarn_T); 
+
+Texture pacman_R("Textures/pacman.png");
+Sprite pacman(pacman_R);
+
+Texture ghost_T("Textures/ghost.png");
+Sprite ghost(ghost_T);
 
 RenderWindow window(VideoMode({ 570, 680 }), "PAC-MAN");
 
