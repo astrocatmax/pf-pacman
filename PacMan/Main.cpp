@@ -296,7 +296,9 @@ void handleInput()
 	}
 }
 
-bool freeCell(int row, int col, int dir)
+
+//GHOSTS------------------------------------------------------------------
+bool freeCell(int row, int col, int dir) //checks if the cell you want to move has a wall or not
 {
 	if (dir == 1)
 		row--;
@@ -313,7 +315,7 @@ bool freeCell(int row, int col, int dir)
 	return 0;
 }
 
-int opposite(int dir)
+int opposite(int dir) //returns the opposite direction
 {
 	if (dir == 1)
 		return 2;
@@ -327,11 +329,11 @@ int opposite(int dir)
 	return 0;
 }
 
-int allDirections(int directions[], int i)
-{
+int allDirections(int directions[], int i) //Checks and stores the available directions in given order (UP, LEFT, DOWN, RIGHT) so it is easier to use later
+{ 
 	int count = 0;
 
-	if (freeCell(vacRow[i], vacCol[i], 1))
+	if (freeCell(vacRow[i], vacCol[i], 1)) 
 	{
 		directions[count] = 1;
 		count++;
@@ -372,6 +374,78 @@ int distance(int row, int col, int dir)
 	return abs(row - bobRow) + abs(col - bobCol); // formula given in manual
 }
 
+void ghostMovement(int i)
+{
+	int count, directions[4], done = 0;
+
+	count = allDirections(directions, i);
+
+	if (i == 0 || i == 2) //chasers
+	{
+		int shortest;
+
+		if (count == 1) //If there is only one way then it just picks it
+			shortest = 0;
+		else //If there is atleast 2 choices then it decides
+		{
+			for (int sel = 0; sel < count; sel++) //makes sure it never picks the direction turning it back
+			{
+				if (directions[sel] != opposite(vacDir[i]))
+				{
+					shortest = sel;
+					break;
+				}
+			}
+
+			for (int dir = 0; dir < count; dir++) //picks the shortest out of the direction not turning back
+			{
+				if (directions[dir] != opposite(vacDir[i]))
+				{
+					if (distance(vacRow[i], vacCol[i], directions[dir]) < distance(vacRow[i], vacCol[i], directions[shortest]))
+						shortest = dir;
+				}
+			}
+		}
+
+		vacDir[i] = directions[shortest];
+	}
+	else if (i == 1 || i == 3) //wanderers
+	{
+		while (!done)
+		{
+			int pick;
+			if (count == 0)
+			{
+				vacDir[i] = opposite(vacDir[i]);
+				done = 1;
+			}
+			else
+				pick = rand() % count;
+
+			if (directions[pick] != opposite(vacDir[i]))
+			{
+				vacDir[i] = directions[pick];
+				done = 1;
+				count--;
+			}
+		}
+	}
+
+	if (vacDir[i] == 1) //Up
+		vacRow[i]--;
+	else if (vacDir[i] == 2) //Down
+		vacRow[i]++;
+	else if (vacDir[i] == 3) //Left
+		vacCol[i]--;
+	else if (vacDir[i] == 4) //Right
+		vacCol[i]++;
+
+}
+//GHOSTS------------------------------------------------------------------
+
+
+
+
 int bobFrame = Player_Speed;
 int vacFrame[4] = { Vacuum_Speed, Vacuum_Speed, Vacuum_Speed, Vacuum_Speed };
 
@@ -380,78 +454,14 @@ void updateGame()
 	if (state != playing)
 		return;
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++) //Handles the movement of ghosts
 	{
-		int count, directions[4], done = 0;
 		vacFrame[i]++;
 		if (vacFrame[i] > Vacuum_Speed)
 		{
-			count = allDirections(directions, i);
-
-			if (i == 0 || i == 2) //chasers
-			{
-				int shortest;
-
-				if(count == 1)
-					shortest = 0;
-				else
-				{
-					for (int sel = 0; sel < count; sel++)
-					{
-						if (directions[sel] != opposite(vacDir[i]))
-						{
-							shortest = sel;
-							break;
-						}
-					}
-
-					for (int dir = 0; dir < count; dir++)
-					{
-						if (directions[dir] != opposite(vacDir[i]))
-						{
-							if (distance(vacRow[i], vacCol[i], directions[dir]) < distance(vacRow[i], vacCol[i], directions[shortest]))
-								shortest = dir;
-						}
-					}
-				}
-
-				vacDir[i] = directions[shortest];
-			}
-			else if (i == 1 || i == 3) //wanderers
-			{
-				while (!done)
-				{
-					int pick;
-					if (count == 0)
-					{
-						vacDir[i] = opposite(vacDir[i]);
-						done = 1;
-					}
-					else
-						pick = rand() % count;
-
-					if (directions[pick] != opposite(vacDir[i]))
-					{
-						vacDir[i] = directions[pick];
-						done = 1;
-						count--;
-					}
-				}
-			}
-
-			if (vacDir[i] == 1) //Up
-				vacRow[i]--;
-			else if (vacDir[i] == 2) //Down
-				vacRow[i]++;
-			else if (vacDir[i] == 3) //Left
-				vacCol[i]--;
-			else if (vacDir[i] == 4) //Right
-				vacCol[i]++;
-
-
+			ghostMovement(i);
 			vacFrame[i] = 1;
 		}
-
 	}
 
 
