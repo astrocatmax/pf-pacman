@@ -8,7 +8,7 @@ using namespace sf;
 using namespace std;
 
 //constants
-const int Player_Speed = 8;
+const int Player_Speed = 8, Vacuum_Speed = 10;
 const int menu = 0, playing = 1, game_over = 2;
 //constants
 
@@ -178,7 +178,7 @@ struct Map {
 			else if (i == 3)
 				vacuum.setColor(Color::Cyan);
 
-			vacuum.setPosition({ vacColStrt[i] * 30.f, vacRowStrt[i] * 30.f + 50.f });
+			vacuum.setPosition({ vacCol[i] * 30.f, vacRow[i] * 30.f + 50.f });
 			window.draw(vacuum);
 		}
 		score.setString("SCORE: " + to_string(score_total));
@@ -296,13 +296,121 @@ void handleInput()
 	}
 }
 
+bool freeCell(int row, int col, int dir)
+{
+	if (dir == 1)
+		row--;
+	else if (dir == 2)
+		row++;
+	else if (dir == 3)
+		col--;
+	else if (dir == 4)
+		col++;
+
+	if (map.data[row][col] != '#')
+		return 1;
+
+	return 0;
+}
+
+int opposite(int dir)
+{
+	if (dir == 1)
+		return 2;
+	else if (dir == 2)
+		return 1;
+	else if (dir == 3)
+		return 4;
+	else if (dir == 4)
+		return 3;
+
+	return 0;
+}
+
+int allDirections(int directions[], int i)
+{
+	int count = 0;
+
+	if (freeCell(vacRow[i], vacCol[i], 1))
+	{
+		directions[count] = 1;
+		count++;
+	}
+
+	if (freeCell(vacRow[i], vacCol[i], 3))
+	{
+		directions[count] = 3;
+		count++;
+	}
+
+	if (freeCell(vacRow[i], vacCol[i], 2))
+	{
+		directions[count] = 2;
+		count++;
+	}
+
+	if (freeCell(vacRow[i], vacCol[i], 4))
+	{
+		directions[count] = 4;
+		count++;
+	}
+
+	return count;
+}
 
 int bobFrame = Player_Speed;
+int vacFrame[4] = { Vacuum_Speed, Vacuum_Speed, Vacuum_Speed, Vacuum_Speed };
 
 void updateGame()
 {
 	if (state != playing)
 		return;
+
+	for (int i = 0; i < 4; i++)
+	{
+		int count, directions[4], done = 0;
+		vacFrame[i]++;
+		if (vacFrame[i] > Vacuum_Speed)
+		{
+			count = allDirections(directions, i);
+
+			if (i == 1 || i == 3) //wanderers
+			{
+				while (!done)
+				{
+					int pick;
+					if (count == 0)
+					{
+						vacDir[i] = opposite(vacDir[i]);
+						done = 1;
+					}
+					else
+						pick = rand() % count;
+
+					if (directions[pick] != opposite(vacDir[i]))
+					{
+						vacDir[i] = directions[pick];
+						done = 1;
+						count--;
+					}
+				}
+			}
+
+			if (vacDir[i] == 1) //Up
+				vacRow[i]--;
+			else if (vacDir[i] == 2) //Down
+				vacRow[i]++;
+			else if (vacDir[i] == 3) //Left
+				vacCol[i]--;
+			else if (vacDir[i] == 4) //Right
+				vacCol[i]++;
+
+			vacFrame[i] = 1;
+		}
+
+	}
+
+
 	if (oiiaPlaying && oiiaClock.getElapsedTime().asSeconds() >= 5.f)
 	{
 		oiiaPlaying = false;
@@ -388,7 +496,7 @@ void drawGame()
 
 int main()
 {
-
+	srand(time(0));
 	if (!map.load("map.txt"))
 	{
 		cout << "Map not Found";
