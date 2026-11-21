@@ -358,6 +358,20 @@ int allDirections(int directions[], int i)
 	return count;
 }
 
+int distance(int row, int col, int dir)
+{
+	if (dir == 1)
+		row--;
+	else if (dir == 2)
+		row++;
+	else if (dir == 3)
+		col--;
+	else if (dir == 4)
+		col++;
+
+	return abs(row - bobRow) + abs(col - bobCol); // formula given in manual
+}
+
 int bobFrame = Player_Speed;
 int vacFrame[4] = { Vacuum_Speed, Vacuum_Speed, Vacuum_Speed, Vacuum_Speed };
 
@@ -374,7 +388,21 @@ void updateGame()
 		{
 			count = allDirections(directions, i);
 
-			if (i == 1 || i == 3) //wanderers
+			if (i == 0 || i == 2) //chasers
+			{
+				int shortest = 0;
+				for (int dir = 1; dir < count; dir++)
+				{
+					if (directions[shortest] != opposite(vacDir[i]))
+					{
+						if (distance(vacRow[i], vacCol[i], directions[dir]) < distance(vacRow[i], vacCol[i], directions[shortest]))
+							shortest = dir;
+					}
+				}
+
+				vacDir[i] = directions[shortest];
+			}
+			else if (i == 1 || i == 3) //wanderers
 			{
 				while (!done)
 				{
@@ -404,6 +432,7 @@ void updateGame()
 				vacCol[i]--;
 			else if (vacDir[i] == 4) //Right
 				vacCol[i]++;
+
 
 			vacFrame[i] = 1;
 		}
@@ -496,7 +525,8 @@ void drawGame()
 
 int main()
 {
-	srand(time(0));
+	srand(time(0)); //makes it so random ACTUALLY works as random
+
 	if (!map.load("map.txt"))
 	{
 		cout << "Map not Found";
