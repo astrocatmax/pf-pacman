@@ -21,7 +21,11 @@ int state = menu;
 Font font("Fonts/Roboto/Roboto.ttf");
 Text score(font);
 
-
+SoundBuffer beepBuf("Sounds/beep.wav");
+SoundBuffer meowBuf("Sounds/meow.mp3");
+Sound beep(beepBuf);
+Sound meow(meowBuf);
+Music bgMusic("Sounds/music.mp3");
 
 Texture BOB_R("Textures/BOB.png");
 Texture BOB_D("Textures/BOB_down.png");
@@ -215,12 +219,16 @@ void updateGame()
 			map.data[bobRow][bobCol] = '-';
 			score_total += 10;
 			food_counter--;
+			beep.play();
+
 
 		}
 		if (map.data[bobRow][bobCol] == 'o') {
 			map.data[bobRow][bobCol] = '-';
 			score_total += 50;
 			food_counter--;
+			meow.play();
+
 		}
 
 		if (keyDir == 1 && bobFrame > Player_Speed && map.data[bobRow - 1][bobCol] != '#') //Up
@@ -272,6 +280,10 @@ int main()
 		return 0;
 	}
 	cout << food_counter;
+
+	bgMusic.setLooping(true);
+	bgMusic.setVolume(40);
+	bgMusic.play();
 
 	window.setFramerateLimit(60);
 
