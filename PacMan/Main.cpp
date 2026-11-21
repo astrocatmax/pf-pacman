@@ -179,13 +179,13 @@ struct Map {
 
 
 
-		livesText.setString("LIVES");
+		livesText.setString("LIVES: ");
 		livesText.setCharacterSize(26);
 		livesText.setFillColor(Color::White);
 		livesText.setStyle(Text::Bold);
 		livesText.setOutlineColor(Color::Black);
 		livesText.setOutlineThickness(2.f);
-		livesText.setPosition({ 400.f, 8.f });
+		livesText.setPosition({ 390.f, 8.f });
 		window.draw(livesText);
 		
 		for (int i = 0; i < 3;i++) {
