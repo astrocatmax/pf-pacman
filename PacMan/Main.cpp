@@ -207,9 +207,6 @@ struct Map {
 			window.draw(yarn);
 		}
 		
-
-
-
 	}
 };
 
@@ -229,6 +226,7 @@ void drawCentered(const string& str, float y, int size, Color color)
 	menutext.setPosition({ 285.f, y });
 	window.draw(menutext);
 }
+
 void drawMenu()
 {
 	drawCentered("PAC-MAN", 120.f, 60, Color::Yellow);
@@ -246,6 +244,7 @@ void drawMenu()
 
 	drawCentered("Up/Down to move, Enter to select", 600.f, 18, Color::White);
 }
+
 void handleInput()
 {
 	while (optional event = window.pollEvent())
@@ -268,27 +267,29 @@ void handleInput()
 						window.close();          
 					
 				}
-				continue;
 			}
-			if (key->code == Keyboard::Key::Up || key->code == Keyboard::Key::W)
+			else if (state == playing)
 			{
-				if (map.data[bobRow - 1][bobCol] != '#')
-					keyDir = 1;
-			}
-			else if (key->code == Keyboard::Key::Down || key->code == Keyboard::Key::S)
-			{
-				if (map.data[bobRow + 1][bobCol] != '#')
-					keyDir = 2;
-			}
-			else if (key->code == Keyboard::Key::Left || key->code == Keyboard::Key::A)
-			{
-				if (map.data[bobRow][bobCol - 1] != '#')
-					keyDir = 3;
-			}
-			else if (key->code == Keyboard::Key::Right || key->code == Keyboard::Key::D)
-			{
-				if (map.data[bobRow][bobCol + 1] != '#')
-					keyDir = 4;
+				if (key->code == Keyboard::Key::Up || key->code == Keyboard::Key::W)
+				{
+					if (map.data[bobRow - 1][bobCol] != '#')
+						keyDir = 1;
+				}
+				else if (key->code == Keyboard::Key::Down || key->code == Keyboard::Key::S)
+				{
+					if (map.data[bobRow + 1][bobCol] != '#')
+						keyDir = 2;
+				}
+				else if (key->code == Keyboard::Key::Left || key->code == Keyboard::Key::A)
+				{
+					if (map.data[bobRow][bobCol - 1] != '#')
+						keyDir = 3;
+				}
+				else if (key->code == Keyboard::Key::Right || key->code == Keyboard::Key::D)
+				{
+					if (map.data[bobRow][bobCol + 1] != '#')
+						keyDir = 4;
+				}
 			}
 			// ... Left, Right, W, A, S, D, P, Enter, Escape in the same way
 		}
