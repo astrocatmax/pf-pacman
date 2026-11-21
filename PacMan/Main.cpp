@@ -53,7 +53,7 @@ Sprite tuna(Tuna_T);
 
 Texture Vacuum_T("Textures/vacuum.png");
 Sprite vacuum(Vacuum_T);
-int vacRowStrt[4], vacColStrt[4], vacRow[4], vacCol[4], vacDir[4];
+int vacRowStrt[4], vacColStrt[4], vacRow[4], vacCol[4], vacDir[4] = { 0 };
 
 Texture Wall_T("Textures/wall.png");
 Sprite wall(Wall_T);
@@ -390,13 +390,28 @@ void updateGame()
 
 			if (i == 0 || i == 2) //chasers
 			{
-				int shortest = 0;
-				for (int dir = 1; dir < count; dir++)
+				int shortest;
+
+				if(count == 1)
+					shortest = 0;
+				else
 				{
-					if (directions[shortest] != opposite(vacDir[i]))
+					for (int sel = 0; sel < count; sel++)
 					{
-						if (distance(vacRow[i], vacCol[i], directions[dir]) < distance(vacRow[i], vacCol[i], directions[shortest]))
-							shortest = dir;
+						if (directions[sel] != opposite(vacDir[i]))
+						{
+							shortest = sel;
+							break;
+						}
+					}
+
+					for (int dir = 0; dir < count; dir++)
+					{
+						if (directions[dir] != opposite(vacDir[i]))
+						{
+							if (distance(vacRow[i], vacCol[i], directions[dir]) < distance(vacRow[i], vacCol[i], directions[shortest]))
+								shortest = dir;
+						}
 					}
 				}
 
