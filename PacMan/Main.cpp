@@ -15,6 +15,8 @@ const int menu = 0, playing = 1, game_over = 2;
 //global variables
 int score_total = 0, food_counter = 0, live_counter = 3;
 int state = menu;
+bool oiiaPlaying = false;
+Clock oiiaClock;
 //global variable
 
 
@@ -250,6 +252,11 @@ int bobFrame = Player_Speed;
 
 void updateGame()
 {
+	if (oiiaPlaying && oiiaClock.getElapsedTime().asSeconds() >= 5.f)
+	{
+		oiiaPlaying = false;
+		bgMusic.play();   //resumes from where it was paused
+	}
 
 	bobFrame++;
 	if (bobFrame > Player_Speed)
@@ -266,10 +273,12 @@ void updateGame()
 			map.data[bobRow][bobCol] = '-';
 			score_total += 50;
 			food_counter--;
+			//meow.play();
 			bgMusic.pause();
-			meow.play();
+			oiia.stop();      //restarts from the beginning if another tuna is eaten mid-sound
 			oiia.play();
-
+			oiiaClock.restart();
+			oiiaPlaying = true;
 
 		}
 		for (int i = 0; i < 4; i++)
