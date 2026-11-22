@@ -406,7 +406,7 @@ void ghostMovement(int i)
 
 	if (i == 0 || i == 2) //chasers
 	{
-		int shortest;
+		int shortest = 0;
 
 		if (count == 1) //If there is only one way then it just picks it
 			shortest = 0;
@@ -438,19 +438,20 @@ void ghostMovement(int i)
 		while (!done)
 		{
 			int pick;
-			if (count == 0)
+			if (count == 1)
 			{
-				vacDir[i] = opposite(vacDir[i]);
+				vacDir[i] = directions[0];
 				done = 1;
 			}
 			else
+			{
 				pick = rand() % count;
 
-			if (directions[pick] != opposite(vacDir[i]))
-			{
-				vacDir[i] = directions[pick];
-				done = 1;
-				count--;
+				if (directions[pick] != opposite(vacDir[i]))
+				{
+					vacDir[i] = directions[pick];
+					done = 1;
+				}
 			}
 		}
 	}
@@ -507,15 +508,12 @@ void updateGame()
 		}
 	}
 
-	if (ghostHitBob())
-		return;
-
-
 	if (oiiaPlaying && oiiaClock.getElapsedTime().asSeconds() >= 5.f)
 	{
 		oiiaPlaying = false;
 		bgMusic.play();   //resumes from where it was paused
 	}
+
 
 	bobFrame++;
 	if (bobFrame > Player_Speed)
@@ -547,8 +545,8 @@ void updateGame()
 			bobFrame = 1;
 		}
 	}
-	if (ghostHitBob())
-		return;
+
+	ghostHitBob();
 
 	if (map.data[bobRow][bobCol] == '.') {
 		map.data[bobRow][bobCol] = '-';
