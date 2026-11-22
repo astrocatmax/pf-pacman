@@ -30,11 +30,15 @@ Text menutext(font);
 SoundBuffer beepBuf("Sounds/beep.wav");
 SoundBuffer meowBuf("Sounds/meow.mp3");
 SoundBuffer explosionBuf("Sounds/explosion.wav");
+SoundBuffer chompBuf("Sounds/Chomp.mp3");
 Sound beep(beepBuf);
 Sound meow(meowBuf);
 Sound explode(explosionBuf);
+Sound chomp(chompBuf);
+
 Music bgMusic("Sounds/music.mp3");
 Music oiia("Sounds/oiia_power.mp3");
+
 
 //BOB---------------------------------------------------------------------
 Texture BOB_R("Textures/BOB.png");
@@ -48,15 +52,15 @@ int bobRowStrt, bobColStrt, bobRow, bobCol, keyDir;
 
 
 //Vacuums-----------------------------------------------------------------
-Texture Vacuum_D("Textures/scared.png");
-Texture Vacuum_R("Textures/scared_right.png");
-Texture Vacuum_L("Textures/scared_left.png");
-Texture Vacuum_U("Textures/scared_up.png");
+Texture Scared_D("Textures/scared.png");
+Texture Scared_R("Textures/scared_right.png");
+Texture Scared_L("Textures/scared_left.png");
+Texture Scared_U("Textures/scared_up.png");
 
-Texture Scared_D("Textures/vacuum.png");
-Texture Scared_R("Textures/vacuum_right.png");
-Texture Scared_L("Textures/vacuum_left.png");
-Texture Scared_U("Textures/vacuum_up.png");
+Texture Vacuum_D("Textures/vacuum.png");
+Texture Vacuum_R("Textures/vacuum_right.png");
+Texture Vacuum_L("Textures/vacuum_left.png");
+Texture Vacuum_U("Textures/vacuum_up.png");
 
 Sprite vacuum(Vacuum_D);
 int vacRowStrt[4], vacColStrt[4], vacRow[4], vacCol[4], vacDir[4] = { 0 };
@@ -558,6 +562,8 @@ bool ghostHitBob() {
 			else
 			{
 				score_total += 200;
+				chomp.play();
+
 				vacRow[i] = vacRowStrt[i];
 				vacCol[i] = vacColStrt[i];
 			}
