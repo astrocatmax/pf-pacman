@@ -9,7 +9,7 @@ using namespace std;
 
 //constants
 const int Player_Speed = 8, Vacuum_Speed = 10;
-const int menu = 0, playing = 1, game_over = 2;
+const int menu = 0, playing = 1, game_over = 2, win = 3;
 //constants
 
 //global variables
@@ -212,6 +212,24 @@ struct Map {
 
 Map map;
 
+void resetPositions() { //created this to reset all positions when bob loses a live
+	bobRow = bobRowStrt;
+	bobCol = bobColStrt;
+	keyDir = 0;
+	
+	for (int i = 0; i < 4; i++) {
+		vacRow[i] = vacRowStrt[i];
+		vacCol[i] = vacColStrt[i];
+		vacDir[i] = 0;
+
+	}
+}
+
+void startNewGame() {
+	map.load("map.txt");
+	resetPositions();
+}
+
 void drawCentered(const string& str, float y, int size, Color color)
 {
 	menutext.setString(str);
@@ -261,8 +279,10 @@ void handleInput()
 					menusel = (menusel + 1) % 3;
 				else if (key->code == Keyboard::Key::Enter)
 				{
-					if (menusel == 0)
-						state = playing;     
+					if (menusel == 0) {
+						startNewGame();
+						state = playing;
+					}     
 					else if (menusel == 2)
 						window.close();          
 					
@@ -290,14 +310,18 @@ void handleInput()
 					if (map.data[bobRow][bobCol + 1] != '#')
 						keyDir = 4;
 				}
+			} 			// ... Left, Right, W, A, S, D, P, Enter, Escape in the same way
+			else if (state == win || state == game_over)
+			{
+				if (key->code == Keyboard::Key::Enter)
+					state = menu;
 			}
-			// ... Left, Right, W, A, S, D, P, Enter, Escape in the same way
 		}
 	}
 }
 
 
-//GHOSTS------------------------------------------------------------------
+//-------------------------------GHOSTS--------------------------
 bool freeCell(int row, int col, int dir) //checks if the cell you want to move has a wall or not
 {
 	if (dir == 1)
@@ -441,7 +465,26 @@ void ghostMovement(int i)
 		vacCol[i]++;
 
 }
-//GHOSTS------------------------------------------------------------------
+
+bool ghostHitBob() {
+	for (int i = 0; i < 4; i++)
+	{
+		if (vacRow[i] == bobRow && vacCol[i] == bobCol)
+		{
+			live_counter--;
+			explode.play();
+			resetPositions();
+			
+			if (live_counter <= 0) {
+				state = game_over;
+			}
+
+			return true;
+		}
+	}
+	return false;
+}
+//-------------------------------GHOSTS--------------------------
 
 
 
@@ -464,6 +507,9 @@ void updateGame()
 		}
 	}
 
+	if (ghostHitBob())
+		return;
+
 
 	if (oiiaPlaying && oiiaClock.getElapsedTime().asSeconds() >= 5.f)
 	{
@@ -474,40 +520,7 @@ void updateGame()
 	bobFrame++;
 	if (bobFrame > Player_Speed)
 	{
-		if (map.data[bobRow][bobCol] == '.') {
-			map.data[bobRow][bobCol] = '-';
-			score_total += 10;
-			food_counter--;
-			beep.play();
-
-
-		}
-		if (map.data[bobRow][bobCol] == 'o') {
-			map.data[bobRow][bobCol] = '-';
-			score_total += 50;
-			food_counter--;
-			//meow.play();
-			bgMusic.pause();
-			oiia.stop();      //restarts from the beginning if another tuna is eaten mid-sound
-			oiia.play();
-			oiiaClock.restart();
-			oiiaPlaying = true;
-
-		}
-		for (int i = 0; i < 4; i++)
-		{
-			if (vacRow[i] == bobRow && vacCol[i] == bobCol)
-			{
-				live_counter--;
-				explode.play();
-
-				bobRow = bobRowStrt;
-				bobCol = bobColStrt;
-				keyDir = 0;
-				break;
-			}
-		}
-
+		
 		if (keyDir == 1 && bobFrame > Player_Speed && map.data[bobRow - 1][bobCol] != '#') //Up
 		{
 			bob.setTexture(BOB_U);
@@ -534,16 +547,60 @@ void updateGame()
 			bobFrame = 1;
 		}
 	}
+	if (ghostHitBob())
+		return;
+
+	if (map.data[bobRow][bobCol] == '.') {
+		map.data[bobRow][bobCol] = '-';
+		score_total += 10;
+		food_counter--;
+		beep.play();
+
+
+	}
+	if (map.data[bobRow][bobCol] == 'o') {
+		map.data[bobRow][bobCol] = '-';
+		score_total += 50;
+		food_counter--;
+		//meow.play();
+		bgMusic.pause();
+		oiia.stop();      //restarts from the beginning if another tuna is eaten mid-sound
+		oiia.play();
+		oiiaClock.restart();
+		oiiaPlaying = true;
+
+	}
+
+	if (food_counter <= 0) //all pellets eaten
+		state = win;
 }
 
+void drawEndScreen() {
+	RectangleShape shade({ 570.f, 630.f });
+	shade.setPosition({ 0.f, 50.f }); //leaves the HUD strip visible
+	shade.setFillColor(Color(0, 0, 0, 170));
+	window.draw(shade);
+
+	if (state == win)
+		drawCentered("YOU WIN!", 250.f, 60, Color::Yellow);
+	else
+		drawCentered("GAME OVER", 250.f, 60, Color::Blue);
+
+	drawCentered("Score: " + to_string(score_total), 340.f, 30, Color::White);
+	drawCentered("Press Enter for menu", 420.f, 22, Color::White);
+}
 void drawGame()
 {
 	window.clear();
 
 	if (state == menu)
 		drawMenu();
-	else
+	else {
 		map.display();
+		if (state == win || state == game_over) {
+			drawEndScreen();
+		}
+	}
 
 	window.display();
 }
