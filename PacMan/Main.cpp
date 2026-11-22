@@ -53,10 +53,10 @@ Texture Vacuum_R("Textures/scared_right.png");
 Texture Vacuum_L("Textures/scared_left.png");
 Texture Vacuum_U("Textures/scared_up.png");
 
-Texture Vacuum_D("Textures/vacuum.png");
-Texture Vacuum_R("Textures/vacuum_right.png");
-Texture Vacuum_L("Textures/vacuum_left.png");
-Texture Vacuum_U("Textures/vacuum_up.png");
+Texture Scared_D("Textures/vacuum.png");
+Texture Scared_R("Textures/vacuum_right.png");
+Texture Scared_L("Textures/vacuum_left.png");
+Texture Scared_U("Textures/vacuum_up.png");
 
 Sprite vacuum(Vacuum_D);
 int vacRowStrt[4], vacColStrt[4], vacRow[4], vacCol[4], vacDir[4] = { 0 };
@@ -466,13 +466,25 @@ void ghostMovementNormal(int i)
 	}
 
 	if (vacDir[i] == 1) //Up
+	{
 		vacRow[i]--;
+		vacuum.setTexture(Vacuum_U);
+	}
 	else if (vacDir[i] == 2) //Down
+	{
 		vacRow[i]++;
+		vacuum.setTexture(Vacuum_D);
+	}
 	else if (vacDir[i] == 3) //Left
+	{
 		vacCol[i]--;
+		vacuum.setTexture(Vacuum_L);
+	}
 	else if (vacDir[i] == 4) //Right
+	{
 		vacCol[i]++;
+		vacuum.setTexture(Vacuum_R);
+	}
 
 }
 
@@ -502,13 +514,25 @@ void ghostMovementScared(int i)
 	}
 
 	if (vacDir[i] == 1) //Up
+	{
 		vacRow[i]--;
+		vacuum.setTexture(Scared_U);
+	}
 	else if (vacDir[i] == 2) //Down
+	{
 		vacRow[i]++;
+		vacuum.setTexture(Scared_D);
+	}
 	else if (vacDir[i] == 3) //Left
+	{
 		vacCol[i]--;
+		vacuum.setTexture(Scared_L);
+	}
 	else if (vacDir[i] == 4) //Right
+	{
 		vacCol[i]++;
+		vacuum.setTexture(Scared_R);
+	}
 }
 
 bool ghostHitBob() {
