@@ -398,7 +398,7 @@ int distance(int row, int col, int dir)
 	return abs(row - bobRow) + abs(col - bobCol); // formula given in manual
 }
 
-void ghostMovement(int i)
+void ghostMovementNormal(int i)
 {
 	int count, directions[4], done = 0;
 
@@ -438,12 +438,12 @@ void ghostMovement(int i)
 		while (!done)
 		{
 			int pick;
-			if (count == 1)
+			if (count == 1) //Only one choice? Then pick it
 			{
 				vacDir[i] = directions[0];
 				done = 1;
 			}
-			else
+			else //picking a random one that is not opposite
 			{
 				pick = rand() % count;
 
@@ -487,7 +487,33 @@ bool ghostHitBob() {
 }
 //-------------------------------GHOSTS--------------------------
 
+//-------------------------------PLAYER--------------------------
+void playerMovement()
+{
 
+	if (keyDir == 1 && map.data[bobRow - 1][bobCol] != '#') //Up
+	{
+		bob.setTexture(BOB_U);
+		bobRow--;
+	}
+	else if (keyDir == 2 && map.data[bobRow + 1][bobCol] != '#') //Down
+	{
+
+		bob.setTexture(BOB_D);
+		bobRow++;
+	}
+	else if (keyDir == 3 && map.data[bobRow][bobCol - 1] != '#') //Left
+	{
+		bob.setTexture(BOB_L);
+		bobCol--;
+	}
+	else if (keyDir == 4 && map.data[bobRow][bobCol + 1] != '#') //Right
+	{
+		bob.setTexture(BOB_R);
+		bobCol++;
+	}
+}
+//-------------------------------PLAYER--------------------------
 
 
 int bobFrame = Player_Speed;
@@ -505,7 +531,7 @@ void updateGame()
 			vacFrame[i]++;
 			if (vacFrame[i] > Vacuum_Speed)
 			{
-				ghostMovement(i);
+				ghostMovementNormal(i);
 				vacFrame[i] = 1;
 			}
 		}
@@ -518,35 +544,13 @@ void updateGame()
 	}
 
 
+	ghostHitBob();
+
 	bobFrame++;
 	if (bobFrame > Player_Speed)
 	{
-		
-		if (keyDir == 1 && bobFrame > Player_Speed && map.data[bobRow - 1][bobCol] != '#') //Up
-		{
-			bob.setTexture(BOB_U);
-			bobRow--;
-			bobFrame = 1;
-		}
-		else if (keyDir == 2 && bobFrame > Player_Speed && map.data[bobRow + 1][bobCol] != '#') //Down
-		{
-
-			bob.setTexture(BOB_D);
-			bobRow++;
-			bobFrame = 1;
-		}
-		else if (keyDir == 3 && bobFrame > Player_Speed && map.data[bobRow][bobCol - 1] != '#') //Left
-		{
-			bob.setTexture(BOB_L);
-			bobCol--;
-			bobFrame = 1;
-		}
-		else if (keyDir == 4 && bobFrame > Player_Speed && map.data[bobRow][bobCol + 1] != '#') //Right
-		{
-			bob.setTexture(BOB_R);
-			bobCol++;
-			bobFrame = 1;
-		}
+		playerMovement();
+		bobFrame = 1;
 	}
 
 	ghostHitBob();
@@ -590,6 +594,7 @@ void drawEndScreen() {
 	drawCentered("Score: " + to_string(score_total), 340.f, 30, Color::White);
 	drawCentered("Press Enter for menu", 420.f, 22, Color::White);
 }
+
 void drawGame()
 {
 	window.clear();
