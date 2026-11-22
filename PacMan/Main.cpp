@@ -230,6 +230,27 @@ struct Map {
 
 Map map;
 
+void saveGame()
+{
+	ofstream out("savegame.txt");
+
+	out << score_total << " " << live_counter << "\n";   
+	out << bobRow << " " << bobCol << "\n";              
+
+	for (int i = 0; i < 4; i++)                          
+		out << vacRow[i] << " " << vacCol[i] << " ";
+	out << "\n";
+
+	for (int i = 0; i < map.rows; i++)                   
+	{
+		for (int j = 0; j < map.cols; j++)
+			out << map.data[i][j];
+		out << "\n";
+	}
+
+	out.close();
+}
+
 void resetPositions() { //created this to reset all positions when bob loses a live
 	bobRow = bobRowStrt;
 	bobCol = bobColStrt;
@@ -330,8 +351,9 @@ void handleInput()
 				}
 				else if (key->code == Keyboard::Key::Escape)
 				{
-					omegaMode = 0;          
-					oiiaPlaying = false;
+					saveGame();
+					omegaMode = 0;    
+                    oiiaPlaying = false;
 					oiia.stop();            
 					bgMusic.play();         
 
