@@ -1,11 +1,16 @@
 Arhum:
 Sounds and Effects
-
+Lives, Score (HUD bar)
+WIN & LOSE screen
+Pellet and Power consumption and replacing. 
 
 Ibrahim:
 Map Loading and Display
 Ghosts
 Player Movement
+Power effects
 
 Muzammil:
 Menu and States
+Textures
+Menu
