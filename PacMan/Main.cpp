@@ -30,7 +30,7 @@ Text menutext(font);
 SoundBuffer beepBuf("Sounds/beep.wav");
 SoundBuffer meowBuf("Sounds/meow.mp3");
 SoundBuffer explosionBuf("Sounds/explosion.wav");
-SoundBuffer chompBuf("Sounds/Chomp.mp3");
+SoundBuffer chompBuf("Sounds/chomp.mp3");
 Sound beep(beepBuf);
 Sound meow(meowBuf);
 Sound explode(explosionBuf);
