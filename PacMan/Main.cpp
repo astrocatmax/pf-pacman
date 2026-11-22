@@ -328,6 +328,15 @@ void handleInput()
 					if (map.data[bobRow][bobCol + 1] != '#')
 						keyDir = 4;
 				}
+				else if (key->code == Keyboard::Key::Escape)
+				{
+					omegaMode = 0;          
+					oiiaPlaying = false;
+					oiia.stop();            
+					bgMusic.play();         
+
+					state = menu;
+				}
 			} 			// ... Left, Right, W, A, S, D, P, Enter, Escape in the same way
 			else if (state == win || state == game_over)
 			{
