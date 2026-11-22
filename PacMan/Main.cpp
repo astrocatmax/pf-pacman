@@ -216,7 +216,7 @@ void resetPositions() { //created this to reset all positions when bob loses a l
 	bobRow = bobRowStrt;
 	bobCol = bobColStrt;
 	keyDir = 0;
-	
+	bob.setTexture(BOB_R);
 	for (int i = 0; i < 4; i++) {
 		vacRow[i] = vacRowStrt[i];
 		vacCol[i] = vacColStrt[i];
