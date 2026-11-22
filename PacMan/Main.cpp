@@ -686,9 +686,8 @@ void updateGame()
 		score_total += 10;
 		food_counter--;
 		beep.play();
-
-
 	}
+
 	if (map.data[bobRow][bobCol] == 'o') {
 		omegaMode = 1;
 		map.data[bobRow][bobCol] = '-';
