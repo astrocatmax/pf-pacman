@@ -498,13 +498,16 @@ void updateGame()
 	if (state != playing)
 		return;
 
-	for (int i = 0; i < 4; i++) //Handles the movement of ghosts
+	if (keyDir != 0) //Waits for you to actually move before they start to move
 	{
-		vacFrame[i]++;
-		if (vacFrame[i] > Vacuum_Speed)
+		for (int i = 0; i < 4; i++) //Handles the movement of ghosts
 		{
-			ghostMovement(i);
-			vacFrame[i] = 1;
+			vacFrame[i]++;
+			if (vacFrame[i] > Vacuum_Speed)
+			{
+				ghostMovement(i);
+				vacFrame[i] = 1;
+			}
 		}
 	}
 
