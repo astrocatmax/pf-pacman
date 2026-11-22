@@ -8,7 +8,7 @@ using namespace sf;
 using namespace std;
 
 //constants
-const int Player_Speed = 8, Vacuum_Speed = 10;
+const int Player_Speed = 8, Vacuum_Speed = 10, Vacuum_Speed_Scared = 16;
 const int menu = 0, playing = 1, game_over = 2, win = 3;
 //constants
 
@@ -17,6 +17,7 @@ int score_total = 0, food_counter = 0, live_counter = 3;
 int state = menu;
 int menusel = 0;
 bool oiiaPlaying = false;
+bool omegaMode = 0;
 Clock oiiaClock;
 //global variable
 
@@ -35,37 +36,45 @@ Sound explode(explosionBuf);
 Music bgMusic("Sounds/music.mp3");
 Music oiia("Sounds/oiia_power.mp3");
 
+//BOB---------------------------------------------------------------------
 Texture BOB_R("Textures/BOB.png");
 Texture BOB_D("Textures/BOB_down.png");
 Texture BOB_U("Textures/BOB_up.png");
 Texture BOB_L("Textures/BOB_left.png");
 
-
 Sprite bob(BOB_R);
 int bobRowStrt, bobColStrt, bobRow, bobCol, keyDir;
+//BOB---------------------------------------------------------------------
+
+
+//Vacuums-----------------------------------------------------------------
+Texture Vacuum_D("Textures/scared.png");
+Texture Vacuum_R("Textures/scared_right.png");
+Texture Vacuum_L("Textures/scared_left.png");
+Texture Vacuum_U("Textures/scared_up.png");
+
+Texture Vacuum_D("Textures/vacuum.png");
+Texture Vacuum_R("Textures/vacuum_right.png");
+Texture Vacuum_L("Textures/vacuum_left.png");
+Texture Vacuum_U("Textures/vacuum_up.png");
+
+Sprite vacuum(Vacuum_D);
+int vacRowStrt[4], vacColStrt[4], vacRow[4], vacCol[4], vacDir[4] = { 0 };
+//Vacuums-----------------------------------------------------------------
+
+
 
 Texture Fish_T("Textures/fish.png");
 Sprite fish(Fish_T);
 
-
 Texture Tuna_T("Textures/tuna.png");
 Sprite tuna(Tuna_T);
-
-Texture Vacuum_T("Textures/vacuum.png");
-Sprite vacuum(Vacuum_T);
-int vacRowStrt[4], vacColStrt[4], vacRow[4], vacCol[4], vacDir[4] = { 0 };
 
 Texture Wall_T("Textures/wall.png");
 Sprite wall(Wall_T);
 
 Texture Yarn_T("Textures/yarn.png");
 Sprite yarn(Yarn_T); 
-
-Texture pacman_R("Textures/pacman.png");
-Sprite pacman(pacman_R);
-
-Texture ghost_T("Textures/ghost.png");
-Sprite ghost(ghost_T);
 
 RenderWindow window(VideoMode({ 570, 680 }), "PAC-MAN");
 
@@ -467,6 +476,41 @@ void ghostMovementNormal(int i)
 
 }
 
+void ghostMovementScared(int i)
+{
+	int count, directions[4], done = 0;
+
+	count = allDirections(directions, i);
+
+	while (!done)
+	{
+		int pick;
+		if (count == 1) //Only one choice? Then pick it
+		{
+			vacDir[i] = directions[0];
+			done = 1;
+		}
+		else //picking a random one that is not opposite
+		{
+			pick = rand() % count;
+			if (directions[pick] != opposite(vacDir[i]))
+			{
+				vacDir[i] = directions[pick];
+				done = 1;
+			}
+		}
+	}
+
+	if (vacDir[i] == 1) //Up
+		vacRow[i]--;
+	else if (vacDir[i] == 2) //Down
+		vacRow[i]++;
+	else if (vacDir[i] == 3) //Left
+		vacCol[i]--;
+	else if (vacDir[i] == 4) //Right
+		vacCol[i]++;
+}
+
 bool ghostHitBob() {
 	for (int i = 0; i < 4; i++)
 	{
@@ -529,9 +573,14 @@ void updateGame()
 		for (int i = 0; i < 4; i++) //Handles the movement of ghosts
 		{
 			vacFrame[i]++;
-			if (vacFrame[i] > Vacuum_Speed)
+			if (vacFrame[i] > Vacuum_Speed && !omegaMode)
 			{
 				ghostMovementNormal(i);
+				vacFrame[i] = 1;
+			}
+			else if (vacFrame[i] > Vacuum_Speed_Scared && omegaMode)
+			{
+				ghostMovementScared(i);
 				vacFrame[i] = 1;
 			}
 		}
