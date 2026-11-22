@@ -4,7 +4,8 @@ Sounds and Effects
 
 Ibrahim:
 Map Loading and Display
-
+Ghosts
+Player Movement
 
 Muzammil:
 Menu and States
