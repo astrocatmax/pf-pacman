@@ -178,14 +178,19 @@ struct Map {
 
 		for (int i = 0; i < 4; i++)
 		{
-			if (i == 0)
-				vacuum.setColor(Color::Red);
-			else if (i == 1)
-				vacuum.setColor(Color::Green);
-			else if (i == 2)
-				vacuum.setColor(Color::Magenta);
-			else if (i == 3)
-				vacuum.setColor(Color::Cyan);
+			if (!omegaMode)
+			{
+				if (i == 0)
+					vacuum.setColor(Color::Red);
+				else if (i == 1)
+					vacuum.setColor(Color::Green);
+				else if (i == 2)
+					vacuum.setColor(Color::Magenta);
+				else if (i == 3)
+					vacuum.setColor(Color::Cyan);
+			}
+			else
+				vacuum.setColor(Color::Blue);
 
 			vacuum.setPosition({ vacCol[i] * 30.f, vacRow[i] * 30.f + 50.f });
 			window.draw(vacuum);
@@ -540,13 +545,23 @@ bool ghostHitBob() {
 	{
 		if (vacRow[i] == bobRow && vacCol[i] == bobCol)
 		{
-			live_counter--;
-			explode.play();
-			resetPositions();
-			
-			if (live_counter <= 0) {
-				state = game_over;
+			if (!omegaMode)
+			{
+				live_counter--;
+				explode.play();
+				resetPositions();
+
+				if (live_counter <= 0) {
+					state = game_over;
+				}
 			}
+			else
+			{
+				score_total += 200;
+				vacRow[i] = vacRowStrt[i];
+				vacCol[i] = vacColStrt[i];
+			}
+
 
 			return true;
 		}
@@ -612,6 +627,7 @@ void updateGame()
 
 	if (oiiaPlaying && oiiaClock.getElapsedTime().asSeconds() >= 5.f)
 	{
+		omegaMode = 0;
 		oiiaPlaying = false;
 		bgMusic.play();   //resumes from where it was paused
 	}
@@ -637,6 +653,7 @@ void updateGame()
 
 	}
 	if (map.data[bobRow][bobCol] == 'o') {
+		omegaMode = 1;
 		map.data[bobRow][bobCol] = '-';
 		score_total += 50;
 		food_counter--;
