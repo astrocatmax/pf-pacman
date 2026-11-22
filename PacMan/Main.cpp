@@ -226,30 +226,30 @@ struct Map {
 		}
 		
 	}
+
+	void saveGame()
+	{
+		ofstream out("savegame.txt");
+
+		out << score_total << " " << live_counter << "\n";
+		out << bobRow << " " << bobCol << "\n";
+
+		for (int i = 0; i < 4; i++)
+			out << vacRow[i] << " " << vacCol[i] << " ";
+		out << "\n";
+
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < cols; j++)
+				out << data[i][j];
+			out << "\n";
+		}
+
+		out.close();
+	}
 };
 
 Map map;
-
-void saveGame()
-{
-	ofstream out("savegame.txt");
-
-	out << score_total << " " << live_counter << "\n";   
-	out << bobRow << " " << bobCol << "\n";              
-
-	for (int i = 0; i < 4; i++)                          
-		out << vacRow[i] << " " << vacCol[i] << " ";
-	out << "\n";
-
-	for (int i = 0; i < map.rows; i++)                   
-	{
-		for (int j = 0; j < map.cols; j++)
-			out << map.data[i][j];
-		out << "\n";
-	}
-
-	out.close();
-}
 
 void resetPositions() { //created this to reset all positions when bob loses a live
 	bobRow = bobRowStrt;
@@ -351,15 +351,15 @@ void handleInput()
 				}
 				else if (key->code == Keyboard::Key::Escape)
 				{
-					saveGame();
-					omegaMode = 0;    
+					map.saveGame();
+					omegaMode = 0;
                     oiiaPlaying = false;
-					oiia.stop();            
-					bgMusic.play();         
+					oiia.stop();
+					bgMusic.play();
 
 					state = menu;
 				}
-			} 			// ... Left, Right, W, A, S, D, P, Enter, Escape in the same way
+			}
 			else if (state == win || state == game_over)
 			{
 				if (key->code == Keyboard::Key::Enter)
