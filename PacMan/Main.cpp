@@ -226,6 +226,53 @@ struct Map {
 		}
 		
 	}
+	int loadSave(string name)
+	{
+		ifstream in(name);
+		if (!in.is_open())
+			return 0;
+
+		int s, l, br, bc;
+		int vr[4], vc[4];
+
+		if (!(in >> s >> l >> br >> bc))   
+			return 0;
+		for (int i = 0; i < 4; i++)
+			in >> vr[i] >> vc[i];
+
+		load("map.txt");  
+
+		score_total = s;
+		live_counter = l;
+		bobRow = br;
+		bobCol = bc;
+		for (int i = 0; i < 4; i++)
+		{
+			vacRow[i] = vr[i];
+			vacCol[i] = vc[i];
+			vacDir[i] = 0;
+		}
+
+		food_counter = 0;
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < cols; j++)
+			{
+				in >> data[i][j];
+				if (data[i][j] == '.' || data[i][j] == 'o')
+					food_counter++;
+			}
+		}
+		in.close();
+
+		keyDir = 0;
+		omegaMode = 0;
+		oiiaPlaying = false;
+		bob.setTexture(BOB_R);
+
+		return 1;
+	}
+
 
 	void saveGame()
 	{
