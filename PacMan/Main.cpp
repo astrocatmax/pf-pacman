@@ -371,7 +371,17 @@ void handleInput()
 					if (menusel == 0) {
 						startNewGame();
 						state = playing;
-					}     
+					}    
+					else if (menusel == 1)
+					{
+						if (map.loadSave("savegame.txt"))
+						{
+							noSave = false;
+							state = playing;
+						}
+						else
+							noSave = true;
+					}
 					else if (menusel == 2)
 						window.close();          
 					
