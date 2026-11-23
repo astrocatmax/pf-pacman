@@ -16,6 +16,7 @@ const int menu = 0, playing = 1, game_over = 2, win = 3;
 int score_total = 0, food_counter = 0, live_counter = 3;
 int state = menu;
 int menusel = 0;
+bool noSave = false;
 bool oiiaPlaying = false;
 bool omegaMode = 0;
 Clock oiiaClock;
@@ -345,6 +346,8 @@ void drawMenu()
 		string label = (i == menusel ? "> " : "  ") + options[i];
 		drawCentered(label, 290.f + i * 60.f, 36, c);
 	}
+	if (noSave)
+		drawCentered("No saved game", 480.f, 24, Color::Red);
 
 	drawCentered("Up/Down to move, Enter to select", 600.f, 18, Color::White);
 }
