@@ -13,4 +13,5 @@ Ibrahim:
 Muzammil:
 -Menu and States
 -Textures
--Saving game into .txt
+-Saving game into save.txt
+-loading game from save.txt
