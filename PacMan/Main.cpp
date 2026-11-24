@@ -183,6 +183,9 @@ struct Map {
 
 		for (int i = 0; i < 4; i++)
 		{
+			if(vacDir[i] == 0)
+				vacuum.setTexture(Vacuum_D);
+
 			if (!scaredMode[i])
 			{
 				if (vacDir[i] == 1) //Up
@@ -658,6 +661,7 @@ bool ghostHitBob() {
 
 				vacRow[i] = vacRowStrt[i];
 				vacCol[i] = vacColStrt[i];
+				vacDir[i] = 0;
 				scaredMode[i] = 0;
 			}
 
