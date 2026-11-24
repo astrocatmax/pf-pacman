@@ -321,6 +321,11 @@ struct Map {
 		out.close();
 	}
 };
+void clearSave()
+{
+	ofstream out("savegame.txt");
+	out.close();
+}
 
 Map map;
 
@@ -652,6 +657,7 @@ bool ghostHitBob() {
 
 				if (live_counter <= 0) {
 					state = game_over;
+					clearSave();
 				}
 			}
 			else
@@ -771,7 +777,10 @@ void updateGame()
 	}
 
 	if (food_counter <= 0) //all pellets eaten
+	{
 		state = win;
+		clearSave();
+	}
 }
 
 void drawEndScreen() {
