@@ -395,9 +395,15 @@ void handleInput()
 			if (state == menu)
 			{
 				if (key->code == Keyboard::Key::Up || key->code == Keyboard::Key::W)
+				{
 					menusel = (menusel + 2) % 3;
+					noSave = false;
+				}
 				else if (key->code == Keyboard::Key::Down || key->code == Keyboard::Key::S)
+				{
 					menusel = (menusel + 1) % 3;
+					noSave = false;
+				}
 				else if (key->code == Keyboard::Key::Enter)
 				{
 					if (menusel == 0) {
@@ -424,13 +430,13 @@ void handleInput()
 			{
 				if (key->code == Keyboard::Key::Up || key->code == Keyboard::Key::W)
 				{
-					menusel = (menusel + 2) % 3;
-					noSave = false;
+					if (map.data[bobRow - 1][bobCol] != '#')
+						keyDir = 1;
 				}
 				else if (key->code == Keyboard::Key::Down || key->code == Keyboard::Key::S)
 				{
-					menusel = (menusel + 1) % 3;
-					noSave = false;
+					if (map.data[bobRow + 1][bobCol] != '#')
+						keyDir = 2;
 				}
 				else if (key->code == Keyboard::Key::Left || key->code == Keyboard::Key::A)
 				{
