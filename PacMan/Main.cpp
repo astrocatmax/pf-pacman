@@ -401,9 +401,10 @@ void handleInput()
 				else if (key->code == Keyboard::Key::Enter)
 				{
 					if (menusel == 0) {
+						noSave = false;
 						startNewGame();
 						state = playing;
-					}    
+					}
 					else if (menusel == 1)
 					{
 						if (map.loadSave("savegame.txt"))
@@ -423,13 +424,13 @@ void handleInput()
 			{
 				if (key->code == Keyboard::Key::Up || key->code == Keyboard::Key::W)
 				{
-					if (map.data[bobRow - 1][bobCol] != '#')
-						keyDir = 1;
+					menusel = (menusel + 2) % 3;
+					noSave = false;
 				}
 				else if (key->code == Keyboard::Key::Down || key->code == Keyboard::Key::S)
 				{
-					if (map.data[bobRow + 1][bobCol] != '#')
-						keyDir = 2;
+					menusel = (menusel + 1) % 3;
+					noSave = false;
 				}
 				else if (key->code == Keyboard::Key::Left || key->code == Keyboard::Key::A)
 				{
