@@ -18,7 +18,6 @@ int state = menu;
 int menusel = 0;
 bool noSave = false;
 bool oiiaPlaying = false;
-bool omegaMode = 0;
 Clock oiiaClock;
 //global variable
 
@@ -65,6 +64,7 @@ Texture Vacuum_U("Textures/vacuum_up.png");
 
 Sprite vacuum(Vacuum_D);
 int vacRowStrt[4], vacColStrt[4], vacRow[4], vacCol[4], vacDir[4] = { 0 };
+bool scaredMode[4] = { 0 };
 //Vacuums-----------------------------------------------------------------
 
 
@@ -183,8 +183,17 @@ struct Map {
 
 		for (int i = 0; i < 4; i++)
 		{
-			if (!omegaMode)
+			if (!scaredMode[i])
 			{
+				if (vacDir[i] == 1) //Up
+					vacuum.setTexture(Vacuum_U);
+				else if (vacDir[i] == 2) //Down
+					vacuum.setTexture(Vacuum_D);
+				else if (vacDir[i] == 3) //Left
+					vacuum.setTexture(Vacuum_L);
+				else if (vacDir[i] == 4) //Right
+					vacuum.setTexture(Vacuum_R);
+
 				if (i == 0)
 					vacuum.setColor(Color::Red);
 				else if (i == 1)
@@ -195,7 +204,18 @@ struct Map {
 					vacuum.setColor(Color::Cyan);
 			}
 			else
+			{
+				if (vacDir[i] == 1) //Up
+					vacuum.setTexture(Scared_U);
+				else if (vacDir[i] == 2) //Down
+					vacuum.setTexture(Scared_D);
+				else if (vacDir[i] == 3) //Left
+					vacuum.setTexture(Scared_L);
+				else if (vacDir[i] == 4) //Right
+					vacuum.setTexture(Scared_R);
+
 				vacuum.setColor(Color::Blue);
+			}
 
 			vacuum.setPosition({ vacCol[i] * 30.f, vacRow[i] * 30.f + 50.f });
 			window.draw(vacuum);
@@ -227,6 +247,7 @@ struct Map {
 		}
 		
 	}
+
 	int loadSave(string name)
 	{
 		ifstream in(name);
@@ -267,7 +288,8 @@ struct Map {
 		in.close();
 
 		keyDir = 0;
-		omegaMode = 0;
+		for(int i = 0; i < 4; i++)
+			scaredMode[i] = 0;
 		oiiaPlaying = false;
 		bob.setTexture(BOB_R);
 
@@ -302,6 +324,8 @@ Map map;
 void resetPositions() { //created this to reset all positions when bob loses a live
 	bobRow = bobRowStrt;
 	bobCol = bobColStrt;
+	for (int i = 0; i < 4; i++)
+		scaredMode[i] = 0;
 	keyDir = 0;
 	bob.setTexture(BOB_R);
 	for (int i = 0; i < 4; i++) {
@@ -412,7 +436,8 @@ void handleInput()
 				else if (key->code == Keyboard::Key::Escape)
 				{
 					map.saveGame();
-					omegaMode = 0;
+					for (int i = 0; i < 4; i++)
+						scaredMode[i] = 0;
                     oiiaPlaying = false;
 					oiia.stop();
 					bgMusic.play();
@@ -566,25 +591,13 @@ void ghostMovementNormal(int i)
 	}
 
 	if (vacDir[i] == 1) //Up
-	{
 		vacRow[i]--;
-		vacuum.setTexture(Vacuum_U);
-	}
 	else if (vacDir[i] == 2) //Down
-	{
 		vacRow[i]++;
-		vacuum.setTexture(Vacuum_D);
-	}
 	else if (vacDir[i] == 3) //Left
-	{
 		vacCol[i]--;
-		vacuum.setTexture(Vacuum_L);
-	}
 	else if (vacDir[i] == 4) //Right
-	{
 		vacCol[i]++;
-		vacuum.setTexture(Vacuum_R);
-	}
 
 }
 
@@ -614,25 +627,13 @@ void ghostMovementScared(int i)
 	}
 
 	if (vacDir[i] == 1) //Up
-	{
 		vacRow[i]--;
-		vacuum.setTexture(Scared_U);
-	}
 	else if (vacDir[i] == 2) //Down
-	{
 		vacRow[i]++;
-		vacuum.setTexture(Scared_D);
-	}
 	else if (vacDir[i] == 3) //Left
-	{
 		vacCol[i]--;
-		vacuum.setTexture(Scared_L);
-	}
 	else if (vacDir[i] == 4) //Right
-	{
 		vacCol[i]++;
-		vacuum.setTexture(Scared_R);
-	}
 }
 
 bool ghostHitBob() {
@@ -640,7 +641,7 @@ bool ghostHitBob() {
 	{
 		if (vacRow[i] == bobRow && vacCol[i] == bobCol)
 		{
-			if (!omegaMode)
+			if (!scaredMode[i])
 			{
 				live_counter--;
 				explode.play();
@@ -657,6 +658,7 @@ bool ghostHitBob() {
 
 				vacRow[i] = vacRowStrt[i];
 				vacCol[i] = vacColStrt[i];
+				scaredMode[i] = 0;
 			}
 
 
@@ -709,12 +711,12 @@ void updateGame()
 		for (int i = 0; i < 4; i++) //Handles the movement of ghosts
 		{
 			vacFrame[i]++;
-			if (vacFrame[i] > Vacuum_Speed && !omegaMode)
+			if (vacFrame[i] > Vacuum_Speed && !scaredMode[i])
 			{
 				ghostMovementNormal(i);
 				vacFrame[i] = 1;
 			}
-			else if (vacFrame[i] > Vacuum_Speed_Scared && omegaMode)
+			else if (vacFrame[i] > Vacuum_Speed_Scared && scaredMode[i])
 			{
 				ghostMovementScared(i);
 				vacFrame[i] = 1;
@@ -722,9 +724,10 @@ void updateGame()
 		}
 	}
 
-	if (oiiaPlaying && oiiaClock.getElapsedTime().asSeconds() >= 5.f)
+	if (oiiaPlaying && oiiaClock.getElapsedTime().asSeconds() >= 5.f)// || (scaredMode[0] == 0 && scaredMode[1] == 0 && scaredMode[2] == 0 && scaredMode[4] == 0))
 	{
-		omegaMode = 0;
+		for (int i = 0; i < 4; i++)
+			scaredMode[i] = 0;
 		oiiaPlaying = false;
 		bgMusic.play();   //resumes from where it was paused
 	}
@@ -749,7 +752,8 @@ void updateGame()
 	}
 
 	if (map.data[bobRow][bobCol] == 'o') {
-		omegaMode = 1;
+		for (int i = 0; i < 4; i++)
+			scaredMode[i] = 1;
 		map.data[bobRow][bobCol] = '-';
 		score_total += 50;
 		food_counter--;
