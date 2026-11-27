@@ -348,6 +348,9 @@ void resetPositions() { //created this to reset all positions when bob loses a l
 		vacDir[i] = 0;
 
 	}
+	oiia.stop();
+	oiiaPlaying = false;
+	bgMusic.play();
 }
 
 void startNewGame() {
@@ -473,6 +476,7 @@ void handleInput()
 			else if (state == win || state == game_over)
 			{
 				if (key->code == Keyboard::Key::Enter)
+					bgMusic.play();
 					state = menu;
 			}
 		}
@@ -674,8 +678,10 @@ bool ghostHitBob() {
 
 				if (live_counter <= 0) {
 					state = game_over;
+					bgMusic.pause();
+					oiia.stop();
+					oiiaPlaying = false;
 					over.play();
-					explode.play();
 					clearSave();
 				}
 				else
