@@ -282,7 +282,7 @@ struct Map {
 		for (int i = 0; i < 4; i++)
 			in >> vr[i] >> vc[i];
 
-		if (!load("map.txt"))
+		if (!load("maze.txt"))
 		{
 			noMap = true;
 			return 0;
@@ -375,7 +375,7 @@ void resetPositions() { //created this to reset all positions when bob loses a l
 }
 
 bool startNewGame() {
-	if (!map.load("map.txt"))
+	if (!map.load("maze.txt"))
 		return false;
 	resetPositions();
 	return true;
@@ -411,7 +411,7 @@ void drawMenu()
 		drawCentered(label, 290.f + i * 60.f, 36, c);
 	}
 	if (noMap)
-		drawCentered("map.txt not found", 480.f, 24, Color::Red);
+		drawCentered("maze.txt not found", 480.f, 24, Color::Red);
 	else if (noSave)
 		drawCentered("No saved game", 480.f, 24, Color::Red);
 
