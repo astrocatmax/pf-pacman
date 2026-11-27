@@ -32,6 +32,10 @@ SoundBuffer meowBuf("Sounds/meow.mp3");
 SoundBuffer explosionBuf("Sounds/explosion.wav");
 SoundBuffer chompBuf("Sounds/chomp.mp3");
 SoundBuffer menuBuf("Sounds/bip.mp3");
+SoundBuffer startBuf("Sounds/start.mp3");
+SoundBuffer overBuf("Sounds/gameover.mp3");
+Sound over(overBuf);
+Sound start(startBuf);
 Sound menuMove(menuBuf);
 Sound beep(beepBuf);
 Sound meow(meowBuf);
@@ -412,6 +416,7 @@ void handleInput()
 				{
 					if (menusel == 0) {
 						noSave = false;
+						start.play();
 						startNewGame();
 						state = playing;
 					}
@@ -420,6 +425,7 @@ void handleInput()
 						if (map.loadSave("savegame.txt"))
 						{
 							noSave = false;
+							start.play();
 							state = playing;
 						}
 						else
@@ -663,13 +669,17 @@ bool ghostHitBob() {
 			if (!scaredMode[i])
 			{
 				live_counter--;
-				explode.play();
 				resetPositions();
+
 
 				if (live_counter <= 0) {
 					state = game_over;
+					over.play();
+					explode.play();
 					clearSave();
 				}
+				else
+					explode.play();
 			}
 			else
 			{
