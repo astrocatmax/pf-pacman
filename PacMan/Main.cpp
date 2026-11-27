@@ -333,6 +333,12 @@ void clearSave()
 	out.close();
 }
 
+void resumeBgMusic()
+{
+	if (bgMusic.getStatus() != SoundSource::Status::Playing)
+		bgMusic.play();
+}
+
 Map map;
 
 void resetPositions() { //created this to reset all positions when bob loses a live
@@ -350,7 +356,7 @@ void resetPositions() { //created this to reset all positions when bob loses a l
 	}
 	oiia.stop();
 	oiiaPlaying = false;
-	bgMusic.play();
+	resumeBgMusic();
 }
 
 void startNewGame() {
@@ -468,16 +474,18 @@ void handleInput()
 						scaredMode[i] = 0;
                     oiiaPlaying = false;
 					oiia.stop();
-					bgMusic.play();
+					resumeBgMusic();
 
 					state = menu;
 				}
 			}
 			else if (state == win || state == game_over)
 			{
-				if (key->code == Keyboard::Key::Enter)
+				if (key->code == Keyboard::Key::Enter) {
 					bgMusic.play();
 					state = menu;
+				}
+					
 			}
 		}
 	}
@@ -678,7 +686,6 @@ bool ghostHitBob() {
 
 				if (live_counter <= 0) {
 					state = game_over;
-					bgMusic.pause();
 					oiia.stop();
 					oiiaPlaying = false;
 					over.play();
@@ -853,7 +860,7 @@ int main()
 	cout << food_counter;
 
 	bgMusic.setLooping(true);
-	bgMusic.setVolume(40);
+	bgMusic.setVolume(30);
 	bgMusic.play();
 
 	window.setFramerateLimit(60);
