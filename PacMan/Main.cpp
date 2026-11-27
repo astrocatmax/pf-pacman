@@ -36,6 +36,8 @@ SoundBuffer menuBuf("Sounds/bip.mp3");
 SoundBuffer startBuf("Sounds/start.mp3");
 SoundBuffer overBuf("Sounds/over.mp3");
 SoundBuffer winBuf("Sounds/win.mp3");
+SoundBuffer thudBuf("Sounds/thud.mp3");
+Sound thud(thudBuf);
 Sound winSound(winBuf);
 Sound over(overBuf);
 Sound start(startBuf);
@@ -444,8 +446,10 @@ void handleInput()
 							start.play();
 							state = playing;
 						}
-						else
+						else {
 							noMap = true;
+							thud.play();
+						}
 					}
 					else if (menusel == 1)
 					{
@@ -455,8 +459,10 @@ void handleInput()
 							start.play();
 							state = playing;
 						}
-						else
+						else {
 							noSave = true;
+							thud.play();
+						}
 					}
 					else if (menusel == 2)
 						window.close();          
