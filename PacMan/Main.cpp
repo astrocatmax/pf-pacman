@@ -400,10 +400,10 @@ void drawMenu()
 		string label = (i == menusel ? "> " : "  ") + options[i];
 		drawCentered(label, 290.f + i * 60.f, 36, c);
 	}
-	if (noSave)
-		drawCentered("No saved game", 480.f, 24, Color::Red);
 	if (noMap)
-		drawCentered("map.txt not found", 480.f, 24, Color::Red);
+		drawCentered("map.txt not found", 480.f, 36, Color::Red);
+	else if (noSave)
+		drawCentered("No saved game", 480.f, 36, Color::Red);
 
 	drawCentered("Up/Down to move, Enter to select", 600.f, 18, Color::White);
 }
