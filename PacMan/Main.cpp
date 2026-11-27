@@ -25,8 +25,28 @@ Clock oiiaClock;
 
 Font font("Fonts/Roboto/Roboto.ttf");
 Text score(font);
-Text livestext(font);
+void setScoreStuff()
+{
+	score.setCharacterSize(26);
+	score.setFillColor(Color::White);
+	score.setStyle(Text::Bold);
+	score.setOutlineColor(Color::Black);
+	score.setOutlineThickness(2.f);
+	score.setPosition({ 15.f, 8.f });
+}
+
 Text menutext(font);
+Text livestext(font);
+void setLivetextStuff()
+{
+	livestext.setString("LIVES: ");
+	livestext.setCharacterSize(26);
+	livestext.setFillColor(Color::White);
+	livestext.setStyle(Text::Bold);
+	livestext.setOutlineColor(Color::Black);
+	livestext.setOutlineThickness(2.f);
+	livestext.setPosition({ 390.f, 8.f });
+}
 
 SoundBuffer beepBuf("Sounds/beep.wav");
 SoundBuffer meowBuf("Sounds/meow.mp3");
@@ -237,23 +257,8 @@ struct Map {
 		}
 		score.setString("SCORE: " + to_string(score_total));
 
-		score.setCharacterSize(26);
-		score.setFillColor(Color::White);
-		score.setStyle(Text::Bold);
-		score.setOutlineColor(Color::Black);
-		score.setOutlineThickness(2.f);
-		score.setPosition({ 15.f, 8.f });
 		window.draw(score);
 
-
-
-		livestext.setString("LIVES: ");
-		livestext.setCharacterSize(26);
-		livestext.setFillColor(Color::White);
-		livestext.setStyle(Text::Bold);
-		livestext.setOutlineColor(Color::Black);
-		livestext.setOutlineThickness(2.f);
-		livestext.setPosition({ 390.f, 8.f });
 		window.draw(livestext);
 		
 		for (int i = 0; i < live_counter;i++) {
@@ -421,96 +426,111 @@ void handleInput()
 			window.close();
 		else if (const auto* key = event->getIf<Event::KeyPressed>())
 		{
-			if (state == menu)
+			switch (state)
 			{
-				if (key->code == Keyboard::Key::Up || key->code == Keyboard::Key::W)
+			case menu:
 				{
-					menusel = (menusel + 2) % 3;
-					noSave = false;
-					menuMove.play();
-				}
-				else if (key->code == Keyboard::Key::Down || key->code == Keyboard::Key::S)
-				{
-					menusel = (menusel + 1) % 3;
-					noSave = false;
-					menuMove.play();
-				}
-				else if (key->code == Keyboard::Key::Enter)
-				{
-					if (menusel == 0) {
-						noSave = false;
-						noMap = false;
-
-						if (startNewGame())
-						{
-							noMap = false;
-							start.play();
-							state = playing;
-						}
-						else {
-							noMap = true;
-							thud.play();
-						}
-					}
-					else if (menusel == 1)
+					if (key->code == Keyboard::Key::Up || key->code == Keyboard::Key::W)
 					{
-						if (map.loadSave("savegame.txt"))
-						{
-							noSave = false;
-							start.play();
-							state = playing;
-						}
-						else {
-							noSave = true;
-							thud.play();
-						}
+						menusel = (menusel + 2) % 3;
+						noSave = false;
+						menuMove.play();
 					}
-					else if (menusel == 2)
-						window.close();          
-					
-				}
-			}
-			else if (state == playing)
-			{
-				if (key->code == Keyboard::Key::Up || key->code == Keyboard::Key::W)
-				{
-					if (map.data[bobRow - 1][bobCol] != '#')
-						keyDir = 1;
-				}
-				else if (key->code == Keyboard::Key::Down || key->code == Keyboard::Key::S)
-				{
-					if (map.data[bobRow + 1][bobCol] != '#')
-						keyDir = 2;
-				}
-				else if (key->code == Keyboard::Key::Left || key->code == Keyboard::Key::A)
-				{
-					if (map.data[bobRow][bobCol - 1] != '#')
-						keyDir = 3;
-				}
-				else if (key->code == Keyboard::Key::Right || key->code == Keyboard::Key::D)
-				{
-					if (map.data[bobRow][bobCol + 1] != '#')
-						keyDir = 4;
-				}
-				else if (key->code == Keyboard::Key::Escape)
-				{
-					map.saveGame();
-					for (int i = 0; i < 4; i++)
-						scaredMode[i] = 0;
-                    oiiaPlaying = false;
-					oiia.stop();
-					resumeBgMusic();
+					else if (key->code == Keyboard::Key::Down || key->code == Keyboard::Key::S)
+					{
+						menusel = (menusel + 1) % 3;
+						noSave = false;
+						menuMove.play();
+					}
+					else if (key->code == Keyboard::Key::Enter)
+					{
+						if (menusel == 0) {
+							noSave = false;
+							noMap = false;
 
-					state = menu;
+							if (startNewGame())
+							{
+								noMap = false;
+								start.play();
+								state = playing;
+							}
+							else {
+								noMap = true;
+								thud.play();
+							}
+						}
+						else if (menusel == 1)
+						{
+							if (map.loadSave("savegame.txt"))
+							{
+								noSave = false;
+								start.play();
+								state = playing;
+							}
+							else {
+								noSave = true;
+								thud.play();
+							}
+						}
+						else if (menusel == 2)
+							window.close();
+
+					}
 				}
-			}
-			else if (state == win || state == game_over)
-			{
-				if (key->code == Keyboard::Key::Enter) {
-					bgMusic.play();
-					state = menu;
+				break;
+			case playing:
+				{
+					if (key->code == Keyboard::Key::Up || key->code == Keyboard::Key::W)
+					{
+						if (map.data[bobRow - 1][bobCol] != '#')
+							keyDir = 1;
+					}
+					else if (key->code == Keyboard::Key::Down || key->code == Keyboard::Key::S)
+					{
+						if (map.data[bobRow + 1][bobCol] != '#')
+							keyDir = 2;
+					}
+					else if (key->code == Keyboard::Key::Left || key->code == Keyboard::Key::A)
+					{
+						if (map.data[bobRow][bobCol - 1] != '#')
+							keyDir = 3;
+					}
+					else if (key->code == Keyboard::Key::Right || key->code == Keyboard::Key::D)
+					{
+						if (map.data[bobRow][bobCol + 1] != '#')
+							keyDir = 4;
+					}
+					else if (key->code == Keyboard::Key::Escape)
+					{
+						map.saveGame();
+						for (int i = 0; i < 4; i++)
+							scaredMode[i] = 0;
+						oiiaPlaying = false;
+						oiia.stop();
+						resumeBgMusic();
+
+						state = menu;
+					}
 				}
-					
+				break;
+			case win:
+				{
+					if (key->code == Keyboard::Key::Enter) {
+						bgMusic.play();
+						state = menu;
+					}
+
+				}
+				break;
+			case game_over:
+				{
+					if (key->code == Keyboard::Key::Enter) {
+						bgMusic.play();
+						state = menu;
+					}
+
+				}
+				break;
 			}
 		}
 	}
@@ -865,15 +885,24 @@ void drawGame()
 {
 	window.clear();
 
-	if (state == menu)
+	switch (state)
+	{
+	case menu:
 		drawMenu();
-	else {
+		break;
+	case playing:
 		map.display();
-		if (state == win || state == game_over) {
-			drawEndScreen();
-		}
+		break;
+	case win:
+		map.display();
+		drawEndScreen();
+		break;
+	case game_over:
+		map.display();
+		drawEndScreen();
+		break;
 	}
-
+	
 	window.display();
 }
 
@@ -881,10 +910,8 @@ int main()
 {
 	srand(time(0)); //makes it so random ACTUALLY works as random
 
-	
-
-	cout << food_counter;
-
+	setScoreStuff();
+	setLivetextStuff();
 	bgMusic.setLooping(true);
 	bgMusic.setVolume(30);
 	bgMusic.play();
