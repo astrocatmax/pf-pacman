@@ -31,6 +31,8 @@ SoundBuffer beepBuf("Sounds/beep.wav");
 SoundBuffer meowBuf("Sounds/meow.mp3");
 SoundBuffer explosionBuf("Sounds/explosion.wav");
 SoundBuffer chompBuf("Sounds/chomp.mp3");
+SoundBuffer menuBuf("Sounds/bip.mp3");
+Sound menuMove(menuBuf);
 Sound beep(beepBuf);
 Sound meow(meowBuf);
 Sound explode(explosionBuf);
@@ -398,11 +400,13 @@ void handleInput()
 				{
 					menusel = (menusel + 2) % 3;
 					noSave = false;
+					menuMove.play();
 				}
 				else if (key->code == Keyboard::Key::Down || key->code == Keyboard::Key::S)
 				{
 					menusel = (menusel + 1) % 3;
 					noSave = false;
+					menuMove.play();
 				}
 				else if (key->code == Keyboard::Key::Enter)
 				{
