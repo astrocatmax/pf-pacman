@@ -17,6 +17,7 @@ int score_total = 0, food_counter = 0, live_counter = 3;
 int state = menu;
 int menusel = 0;
 bool noSave = false;
+bool noMap = false;
 bool oiiaPlaying = false;
 Clock oiiaClock;
 //global variable
@@ -271,7 +272,11 @@ struct Map {
 		for (int i = 0; i < 4; i++)
 			in >> vr[i] >> vc[i];
 
-		load("map.txt");  
+		if (!load("map.txt"))
+		{
+			noMap = true;
+			return 0;
+		}
 
 		score_total = s;
 		live_counter = l;
@@ -359,9 +364,11 @@ void resetPositions() { //created this to reset all positions when bob loses a l
 	resumeBgMusic();
 }
 
-void startNewGame() {
-	map.load("map.txt");
+bool startNewGame() {
+	if (!map.load("map.txt"))
+		return false;
 	resetPositions();
+	return true;
 }
 
 void drawCentered(const string& str, float y, int size, Color color)
@@ -395,6 +402,8 @@ void drawMenu()
 	}
 	if (noSave)
 		drawCentered("No saved game", 480.f, 24, Color::Red);
+	if (noMap)
+		drawCentered("map.txt not found", 480.f, 24, Color::Red);
 
 	drawCentered("Up/Down to move, Enter to select", 600.f, 18, Color::White);
 }
@@ -425,9 +434,14 @@ void handleInput()
 				{
 					if (menusel == 0) {
 						noSave = false;
-						start.play();
-						startNewGame();
-						state = playing;
+						if (startNewGame())
+						{
+							noMap = false;
+							start.play();
+							state = playing;
+						}
+						else
+							noMap = true;
 					}
 					else if (menusel == 1)
 					{
@@ -852,11 +866,8 @@ int main()
 {
 	srand(time(0)); //makes it so random ACTUALLY works as random
 
-	if (!map.load("map.txt"))
-	{
-		cout << "Map not Found";
-		return 0;
-	}
+	
+
 	cout << food_counter;
 
 	bgMusic.setLooping(true);
