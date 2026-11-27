@@ -34,7 +34,7 @@ SoundBuffer explosionBuf("Sounds/explosion.wav");
 SoundBuffer chompBuf("Sounds/chomp.mp3");
 SoundBuffer menuBuf("Sounds/bip.mp3");
 SoundBuffer startBuf("Sounds/start.mp3");
-SoundBuffer overBuf("Sounds/gameover.mp3");
+SoundBuffer overBuf("Sounds/over.mp3");
 Sound over(overBuf);
 Sound start(startBuf);
 Sound menuMove(menuBuf);
@@ -401,9 +401,9 @@ void drawMenu()
 		drawCentered(label, 290.f + i * 60.f, 36, c);
 	}
 	if (noMap)
-		drawCentered("map.txt not found", 480.f, 36, Color::Red);
+		drawCentered("map.txt not found", 480.f, 24, Color::Red);
 	else if (noSave)
-		drawCentered("No saved game", 480.f, 36, Color::Red);
+		drawCentered("No saved game", 480.f, 24, Color::Red);
 
 	drawCentered("Up/Down to move, Enter to select", 600.f, 18, Color::White);
 }
@@ -434,6 +434,8 @@ void handleInput()
 				{
 					if (menusel == 0) {
 						noSave = false;
+						noMap = false;
+
 						if (startNewGame())
 						{
 							noMap = false;
