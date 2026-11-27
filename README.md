@@ -56,7 +56,7 @@ Menu options: **New Game**, **Continue** (loads the last saved game), **Exit**.
 ### Requirements
 
 - A C++ compiler with C++17 support
-- [SFML 3.x](https://www.sfml-dev.org/download.php) (the code uses the SFML 3 API)
+- [SFML 3.1.0](https://www.sfml-dev.org/download.php) (the code uses the SFML 3 API)
 
 ### Steps
 
