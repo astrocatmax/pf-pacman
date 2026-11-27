@@ -46,7 +46,8 @@ Menu options: **New Game**, **Continue** (loads the last saved game), **Exit**.
 - Eat every fish and tuna on the map to win.
 - Bob starts with 3 lives, shown as yarn balls in the top right. Touching a vacuum costs one life.
 - Fish are worth 10 points.
-- Tuna is worth 50 points and scares the vacuums for 5 seconds. A scared vacuum is slower and can be eaten for 200 points, after which it respawns at its start position.
+- Tuna is worth 50 points and scares the vacuums for 5 seconds. 
+- A scared vacuum is slower and can be eaten for 200 points, after which it respawns at its start position.
 - The vacuums wait until Bob makes his first move. The red and magenta vacuums chase Bob, and the green and cyan vacuums wander randomly.
 - The game ends when all lives are lost.
 
