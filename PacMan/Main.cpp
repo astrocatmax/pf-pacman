@@ -37,15 +37,16 @@ SoundBuffer startBuf("Sounds/start.mp3");
 SoundBuffer overBuf("Sounds/over.mp3");
 SoundBuffer winBuf("Sounds/win.mp3");
 SoundBuffer thudBuf("Sounds/thud.mp3");
-Sound thud(thudBuf);
-Sound winSound(winBuf);
-Sound over(overBuf);
-Sound start(startBuf);
-Sound menuMove(menuBuf);
+
 Sound beep(beepBuf);
 Sound meow(meowBuf);
 Sound explode(explosionBuf);
 Sound chomp(chompBuf);
+Sound menuMove(menuBuf);
+Sound start(startBuf);
+Sound over(overBuf);
+Sound winSound(winBuf);
+Sound thud(thudBuf);
 
 Music bgMusic("Sounds/music.mp3");
 Music oiia("Sounds/oiia_power.mp3");
