@@ -35,6 +35,8 @@ SoundBuffer chompBuf("Sounds/chomp.mp3");
 SoundBuffer menuBuf("Sounds/bip.mp3");
 SoundBuffer startBuf("Sounds/start.mp3");
 SoundBuffer overBuf("Sounds/over.mp3");
+SoundBuffer winBuf("Sounds/win.mp3");
+Sound winSound(winBuf);
 Sound over(overBuf);
 Sound start(startBuf);
 Sound menuMove(menuBuf);
@@ -829,6 +831,10 @@ void updateGame()
 	if (food_counter <= 0) //all pellets eaten
 	{
 		state = win;
+		bgMusic.pause();
+		oiia.stop();
+		oiiaPlaying = false;
+		winSound.play();
 		clearSave();
 	}
 }
