@@ -63,4 +63,4 @@ Menu options: **New Game**, **Continue** (loads the last saved game), **Exit**.
 1. Clone this repository.
 2. Open the project in your IDE and link SFML (Graphics, Window, System and Audio).
 3. Build the project.
-4. Run the game from the folder that contains `map.txt`,
+4. Run the game from the folder that contains 'maze.txt'

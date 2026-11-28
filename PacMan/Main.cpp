@@ -3,13 +3,18 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+#include<cstdlib>
+#include<ctime>
+#include<cmath>
+#include<optional>
 
 using namespace sf;
 using namespace std;
 
 //constants
-const int Player_Speed = 8, Vacuum_Speed = 10, Vacuum_Speed_Scared = 16;
+const int Player_Speed = 8, Vacuum_Speed = 10, Vacuum_Speed_Scared = 16, Scared_Timer = 5;
 const int menu = 0, playing = 1, game_over = 2, win = 3;
+const float Tile = 30, HUD = 50;
 //constants
 
 //global variables
@@ -113,7 +118,7 @@ Sprite wall(Wall_T);
 Texture Yarn_T("Textures/yarn.png");
 Sprite yarn(Yarn_T); 
 
-RenderWindow window(VideoMode({ 570, 680 }), "PAC-MAN");
+RenderWindow window(VideoMode({ 570, 680 }), "Pac-Man");
 
 
 struct Map {
@@ -184,12 +189,12 @@ struct Map {
 	{
 		Vector2f pos;
 
-		float y = 50; //actually the rows
+		float y = HUD; //actually the rows
 		float x; //actually the columns
-		for (int i = 0; i < rows; i++, y += 30)
+		for (int i = 0; i < rows; i++, y += Tile)
 		{
 			x = 0;
-			for (int j = 0; j < cols; j++, x += 30)
+			for (int j = 0; j < cols; j++, x += Tile)
 			{
 				pos = { x, y };
 				if (data[i][j] == '#')
@@ -210,7 +215,7 @@ struct Map {
 			}
 		}
 
-		bob.setPosition({ bobCol * 30.f, bobRow * 30.f + 50.f });
+		bob.setPosition({ bobCol * Tile, bobRow * Tile + HUD });
 		window.draw(bob);
 
 		for (int i = 0; i < 4; i++)
@@ -252,7 +257,7 @@ struct Map {
 				vacuum.setColor(Color::Blue);
 			}
 
-			vacuum.setPosition({ vacCol[i] * 30.f, vacRow[i] * 30.f + 50.f });
+			vacuum.setPosition({ vacCol[i] * Tile, vacRow[i] * Tile + HUD });
 			window.draw(vacuum);
 		}
 		score.setString("SCORE: " + to_string(score_total));
@@ -813,7 +818,7 @@ void updateGame()
 		}
 	}
 
-	if (oiiaPlaying && oiiaClock.getElapsedTime().asSeconds() >= 5.f)// || (scaredMode[0] == 0 && scaredMode[1] == 0 && scaredMode[2] == 0 && scaredMode[4] == 0))
+	if (oiiaPlaying && oiiaClock.getElapsedTime().asSeconds() >= Scared_Timer)
 	{
 		for (int i = 0; i < 4; i++)
 			scaredMode[i] = 0;
@@ -868,7 +873,7 @@ void updateGame()
 
 void drawEndScreen() {
 	RectangleShape shade({ 570.f, 630.f });
-	shade.setPosition({ 0.f, 50.f }); //leaves the HUD strip visible
+	shade.setPosition({ 0.f, HUD }); //leaves the HUD strip visible
 	shade.setFillColor(Color(0, 0, 0, 170));
 	window.draw(shade);
 
